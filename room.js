@@ -1,4 +1,4 @@
-
+key = require('./key.js');
 class Room {
     constructor(id) {
         this.id = id;
@@ -10,6 +10,7 @@ class Room {
             [3, []],
         ]);
         this.started = false;
+        this.keys = [];
     }
 
     addPlayer(player) {
@@ -18,9 +19,19 @@ class Room {
         this.teams.get(player.id)[0].push(player);
     }
 
+    addKey(key) {
+        this.keys.push(key);
+    }
+
+    removeKey(key) {
+        this.keys.splice(this.keys.indexOf(key), 1);
+    }
+
     removePlayer(player) {
         this.players.splice(this.players.indexOf(player), 1);
         //TODO: Assign teams
         this.teams.get(player.id)[0].splice(this.teams.get(player.id)[0].indexOf(player), 1);
     }
 }
+
+module.exports = Room;

@@ -19,6 +19,7 @@ class GameLogic {
         this.players = new Map();
         this.rooms = new Map();
         this.rooms.set(0, new Room(0));
+        this.rooms.get(0).addKey(new Key(0, 0, 0));
     }
 
     // Es connecta un client/jugador
@@ -76,12 +77,14 @@ class GameLogic {
     // Retorna l'estat del joc (sense el objecte del client amb id playerId)
     getGameState(playerId) {
         const player = this.players.get(playerId);
+        const room = player.room;
         return {
             clientPlayer: player.getGameState(),
             otherPlayers: Array.from(this.players.values())
                             .filter(player => player.id !== playerId)
-                            .filter(player => player.room === player.room)
-                            .map(player => player.getGameState())
+                            .filter(player => player.room === room)
+                            .map(player => player.getGameState()),
+            keys: room.keys.map(key => key.getGameState())
         };
     }
 
