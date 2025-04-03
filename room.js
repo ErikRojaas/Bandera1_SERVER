@@ -16,7 +16,7 @@ class Room {
     addPlayer(player) {
         this.players.push(player);
         //TODO: Assign teams
-        this.teams.get(player.id)[0].push(player);
+        this.teams.get(0).push(player);
     }
 
     addKey(key) {

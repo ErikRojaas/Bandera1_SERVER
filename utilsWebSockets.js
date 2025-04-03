@@ -3,7 +3,7 @@
 const WebSocket = require('ws')
 const { v4: uuidv4 } = require('uuid')
 
-class Obj {
+class UtilsWebSockets {
 
     init(httpServer, port) {
 
@@ -129,4 +129,4 @@ class Obj {
     }
 }
 
-module.exports = Obj
+module.exports = UtilsWebSockets

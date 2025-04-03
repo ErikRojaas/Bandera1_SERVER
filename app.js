@@ -11,7 +11,7 @@ const port = process.env.PORT || 8080;
 
 // Inicialitzar WebSockets i la lògica del joc
 const ws = new webSockets();
-const game = new GameLogic();
+const game = new GameLogic(ws);
 let gameLoop = new GameLoop();
 
 // Pruebas en localhost, para produccion poner url servidor

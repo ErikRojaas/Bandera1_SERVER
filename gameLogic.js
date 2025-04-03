@@ -3,8 +3,7 @@ const fs = require('fs');
 const Player = require('./player.js');
 const Room = require('./room.js');
 const Key = require ('./key.js')
-const utilsWebSockets = require('./utilsWebSockets.js');
-const Key = require('./key.js');
+const UtilsWebSockets = require('./utilsWebSockets.js');
 
 const DIRECTIONS = {
     "up":         { dx: 0, dy: -1 },
@@ -15,12 +14,13 @@ const DIRECTIONS = {
 };
 
 class GameLogic {
-    
-    constructor() {
+
+    constructor(ws) {
         this.players = new Map();
         this.rooms = new Map();
         this.rooms.set(0, new Room(0));
         this.rooms.get(0).addKey(new Key(0, 0, 0));
+        this.ws = ws;
     }
 
     // Es connecta un client/jugador
@@ -34,7 +34,7 @@ class GameLogic {
         );
         newPlayer.setRoom(this.rooms.get(0));
         this.players.set(id, newPlayer);
-        utilsWebSockets.sendTo(id, JSON.stringify({
+        this.ws.sendTo(id, JSON.stringify({
             type: "welcome",
             data: this.rooms.get(0).players.length
         }));
@@ -70,7 +70,7 @@ class GameLogic {
 
     // Blucle de joc (funció que s'executa contínuament)
     updateGame(fps) {
-        for (const player of this.players) {
+        for (const player of this.players.values()) {
             player.update(1 / fps);
         }
     }
@@ -91,8 +91,8 @@ class GameLogic {
 
     getInitialPosition() {
         //Random
-        const x = Math.floor(Math.random() * (MAP_SIZE.width - 2)) + 1;
-        const y = Math.floor(Math.random() * (MAP_SIZE.height - 2)) + 1;
+        const x = Math.floor(Math.random() * (100)) - 50;
+        const y = Math.floor(Math.random() * (100)) - 50;
         return { x, y };
     }
 }
