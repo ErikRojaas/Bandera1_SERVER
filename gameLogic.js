@@ -3,6 +3,7 @@ const fs = require('fs');
 const Player = require('./player.js');
 const Room = require('./room.js');
 const utilsWebSockets = require('./utilsWebSockets.js');
+const Key = require('./key.js');
 
 const DIRECTIONS = {
     "up":         { dx: 0, dy: -1 },
