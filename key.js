@@ -1,6 +1,4 @@
 
-
-
 class Key {
     constructor(id, x, y) {
         this.id = id;
