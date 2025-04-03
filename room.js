@@ -30,7 +30,7 @@ class Room {
     removePlayer(player) {
         this.players.splice(this.players.indexOf(player), 1);
         //TODO: Assign teams
-        this.teams.get(player.id)[0].splice(this.teams.get(player.id)[0].indexOf(player), 1);
+        this.teams.get(0).splice(this.teams.get(0).indexOf(player), 1);
     }
 }
 
