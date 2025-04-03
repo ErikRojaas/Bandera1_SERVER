@@ -15,7 +15,7 @@ const game = new GameLogic();
 let gameLoop = new GameLoop();
 
 // Pruebas en localhost, para produccion poner url servidor
-const apkUrl = `https://bandera1.ieticloudpro.ieti.cat:${port}/android-debug.apk`;
+const apkUrl = `https://bandera1.ieti.site/android-debug.apk`;
 
 // Inicialitzar servidor Express
 const app = express();
