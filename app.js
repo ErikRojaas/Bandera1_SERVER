@@ -2,23 +2,44 @@ const express = require('express');
 const GameLogic = require('./gameLogic.js');
 const webSockets = require('./utilsWebSockets.js');
 const GameLoop = require('./utilsGameLoop.js');
+const QRCode = require("qrcode");
+const path = require("path");
+const cors = require("cors");
 
 const debug = true;
-const port = process.env.PORT || 8888;
+const port = process.env.PORT || 8080;
 
 // Inicialitzar WebSockets i la lògica del joc
 const ws = new webSockets();
 const game = new GameLogic();
 let gameLoop = new GameLoop();
 
+// Pruebas en localhost, para produccion poner url servidor
+const apkUrl = `https://bandera1.ieticloudpro.ieti.cat:${port}/android-debug.apk`;
+
 // Inicialitzar servidor Express
 const app = express();
+app.use(cors()); 
 app.use(express.static('public'));
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "public")));
+
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.html"))
+})
 
 // Inicialitzar servidor HTTP
-const httpServer = app.listen(port, () => {
+const httpServer = app.listen(port, async () => {
     console.log(`Servidor HTTP escoltant a: http://localhost:${port}`);
+
+    try {
+        await QRCode.toFile(path.join(__dirname, "public", "qrcode.png"), apkUrl, {
+            width: 400,
+        });
+        console.log("QR generado en /public/qrcode.png");
+    } catch (err) {
+        console.error("Error al generar el QR:", err);
+    }
 });
 
 // Gestionar WebSockets
