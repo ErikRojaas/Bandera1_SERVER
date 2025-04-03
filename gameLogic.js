@@ -2,6 +2,7 @@
 const fs = require('fs');
 const Player = require('./player.js');
 const Room = require('./room.js');
+const Key = require ('./key.js')
 const utilsWebSockets = require('./utilsWebSockets.js');
 
 const DIRECTIONS = {
@@ -11,7 +12,6 @@ const DIRECTIONS = {
     "right":      { dx: 1, dy: 0 },
     "none":       { dx: 0, dy: 0 },
 };
-
 
 class GameLogic {
     

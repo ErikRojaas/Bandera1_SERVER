@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bandera1_server": "file:",
     "express": "^5.1.0",
     "uuid": "^11.1.0",
     "ws": "^8.18.1"
