@@ -21,7 +21,6 @@ Get-Content $configFile | ForEach-Object {
 
 $USER = if ($args.Count -ge 1) { $args[0] } else { $DEFAULT_USER }
 $RSA_PATH = if ($args.Count -ge 2) { $args[1] } else { $DEFAULT_RSA_PATH }
-$SERVER_PORT = if ($args.Count -ge 3) { $args[2] } else { $DEFAULT_SERVER_PORT }
 
 Write-Host "Connectant amb l'usuari: $USER"
 Write-Host "Utilitzant la clau RSA: $RSA_PATH"
