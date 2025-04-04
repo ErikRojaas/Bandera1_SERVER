@@ -20,12 +20,12 @@ const apkUrl = `https://bandera1.ieti.site/android-debug.apk`;
 // Inicialitzar servidor Express
 const app = express();
 app.use(cors()); 
-app.use(express.static('public'));
+app.use(express.static('web'));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "web")));
 
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "index.html"))
+    res.sendFile(path.join(__dirname, "web", "index.html"))
 })
 
 // Inicialitzar servidor HTTP
