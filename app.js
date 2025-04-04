@@ -6,6 +6,7 @@ const QRCode = require("qrcode");
 const path = require("path");
 const cors = require("cors");
 
+
 const debug = true;
 const port = process.env.PORT || 8080;
 
@@ -45,14 +46,14 @@ const httpServer = app.listen(port, async () => {
 // Gestionar WebSockets
 ws.init(httpServer, port);
 
-ws.onConnection = (socket, id) => {
-    if (debug) console.log("WebSocket client connected: " + id);
-    const player = game.addClient(id);
-    // Send the id to the client
-    socket.send(JSON.stringify({ 
-        type: "connected",
-        data: game.getGameState(player.id)
-    }));
+ws.onConnection = (socket, id, connectionType) => {
+    if (connectionType === "mobile") {
+        if (debug) console.log("WebSocket client(Player) connected: " + id);
+        game.addPlayer(id);
+    } else {
+        if (debug) console.log("WebSocket client(Web) connected: " + id);
+        game.addWebClient(id);
+    }
 };
 
 ws.onMessage = (socket, id, msg) => {
@@ -60,17 +61,23 @@ ws.onMessage = (socket, id, msg) => {
     game.handleMessage(id, msg);
 };
 
-ws.onClose = (socket, id) => {
+ws.onClose = (socket, id, connectionType) => {
     if (debug) console.log("WebSocket client disconnected: " + id);
-    game.removeClient(id);
-    ws.broadcast(JSON.stringify({ type: "disconnected", from: "server" }));
+    if (connectionType === "mobile") {
+        game.removePlayer(id);
+    } else {
+        game.removeWebClient(id);
+    }
 };
 
 // **Game Loop**
 gameLoop.run = (fps) => {
     game.updateGame(fps);
     for (let player of game.players.values()) {
-        ws.sendTo(player.id, JSON.stringify({ type: "update", data: game.getGameState(player.id) }));
+        ws.sendTo(player.id, JSON.stringify({ type: "update", data: game.getGameStateForPlayer(player.id) }));
+    }
+    for (let webClient of game.webClients.values()) {
+        ws.sendTo(webClient.id, JSON.stringify({ type: "update", data: game.getGameStateForWebClient(webClient.id) }));
     }
 };
 gameLoop.start();

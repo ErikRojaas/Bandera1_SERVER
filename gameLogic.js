@@ -21,10 +21,12 @@ class GameLogic {
         this.rooms.set(0, new Room(0));
         this.rooms.get(0).addKey(new Key(0, 0, 0));
         this.ws = ws;
+
+        this.webClients = new Map();
     }
 
     // Es connecta un client/jugador
-    addClient(id) {
+    addPlayer(id) {
         let { x, y } = this.getInitialPosition();
         const newPlayer = new Player(
             id,
@@ -42,9 +44,22 @@ class GameLogic {
     }
 
     // Es desconnecta un client/jugador
-    removeClient(id) {
+    removePlayer(id) {
         this.players.get(id).OnDisconnect();
         this.players.delete(id);
+    }
+
+
+    addWebClient(id) {
+        const newWebClient = new WebClient(id);
+        webClient.setRoom(this.rooms.get(0));
+        this.webClients.set(id, newWebClient);
+        return newWebClient;
+    }
+
+    removeWebClient(id) {
+        this.webClients.get(id).OnDisconnect();
+        this.webClients.delete(id);
     }
 
     // Tractar un missatge d'un client/jugador
@@ -75,25 +90,36 @@ class GameLogic {
         }
     }
 
-    // Retorna l'estat del joc (sense el objecte del client amb id playerId)
-    getGameState(playerId) {
-        const player = this.players.get(playerId);
-        const room = player.room;
-        return {
-            clientPlayer: player.getGameState(),
-            otherPlayers: Array.from(this.players.values())
-                            .filter(player => player.id !== playerId)
-                            .filter(player => player.room === room)
-                            .map(player => player.getGameState()),
-            keys: room.keys.map(key => key.getGameState())
-        };
-    }
-
     getInitialPosition() {
         //Random
         const x = Math.floor(Math.random() * (100)) - 50;
         const y = Math.floor(Math.random() * (100)) - 50;
         return { x, y };
+    }
+
+    // Retorna l'estat del joc (sense el objecte del client amb id playerId)
+    getGameStateForPlayer(playerId) {
+        const player = this.players.get(playerId);
+        const room = player.room;
+        return {
+            clientPlayer: player.getGameState(),
+            otherPlayers: Array.from(this.players.values())
+                            .filter(player => player.id !== playerId) // not the same player
+                            .filter(player => player.room === room) // same room
+                            .map(player => player.getGameState()),
+            keys: room.keys.map(key => key.getGameState())
+        };
+    }
+
+    getGameStateForWebClient(webClientId) {
+        const webClient = this.webClients.get(webClientId);
+        const room = webClient.room;
+        return {
+            players: Array.from(this.players.values())
+                            .filter(player => player.room === room) // same room
+                            .map(player => player.getGameState()),
+            keys: room.keys.map(key => key.getGameState())
+        };
     }
 }
 

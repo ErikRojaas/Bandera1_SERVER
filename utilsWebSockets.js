@@ -2,13 +2,13 @@
 
 const WebSocket = require('ws')
 const { v4: uuidv4 } = require('uuid')
-
+const url = require('url');
 class UtilsWebSockets {
 
     init(httpServer, port) {
 
         // Define empty callbacks
-        this.onConnection = (socket, id) => { }
+        this.onConnection = (socket, id, req) => { }
         this.onMessage = (socket, id, obj) => { }
         this.onClose = (socket, id) => { }
 
@@ -18,7 +18,7 @@ class UtilsWebSockets {
         console.log(`Listening for WebSocket queries on ${port}`)
 
         // What to do when a websocket client connects
-        this.ws.on('connection', (ws) => { this.newConnection(ws) })
+        this.ws.on('connection', (ws, req) => { this.newConnection(ws, req) });
     }
 
     end() {
@@ -26,29 +26,17 @@ class UtilsWebSockets {
     }
 
     // A websocket client connects
-    newConnection(con) {
+    newConnection(con, req) {
         console.log("Client connected");
-    
+        const parameters = url.parse(req.url, true).query;
+        const connectionType = parameters.type;
         // Generar ID únic per al client
         const id = "C" + uuidv4().substring(0, 5).toUpperCase();
-        const metadata = { id };
+        const metadata = { id , connectionType};
         this.socketsClients.set(con, metadata);
-    
-        // Enviar missatge de benvinguda amb ID únic
-        con.send(JSON.stringify({
-            type: "welcome",
-            id: id,
-            message: "Welcome to the server"
-        }));
-    
-        // Informar tots els clients de la nova connexió
-        this.broadcast(JSON.stringify({
-            type: "newClient",
-            id: id
-        }));
-    
+
         if (this.onConnection && typeof this.onConnection === "function") {
-            this.onConnection(con, id);
+            this.onConnection(con, id, connectionType);
         }
     
         con.on("close", () => {
@@ -63,8 +51,10 @@ class UtilsWebSockets {
 
     closeConnection(con) {
         if (this.onClose && typeof this.onClose === "function") {
-            var id = this.socketsClients.get(con).id
-            this.onClose(con, id)
+            const metadata = this.socketsClients.get(con);
+            const id = metadata.id;
+            const connectionType = metadata.connectionType;
+            this.onClose(con, id, connectionType)
         }
     }
 
