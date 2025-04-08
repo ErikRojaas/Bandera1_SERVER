@@ -3,15 +3,7 @@ const fs = require('fs');
 const Player = require('./player.js');
 const Room = require('./room.js');
 const Key = require ('./key.js')
-const UtilsWebSockets = require('./utilsWebSockets.js');
-
-const DIRECTIONS = {
-    "up":         { dx: 0, dy: -1 },
-    "left":       { dx: -1, dy: 0 },
-    "down":       { dx: 0, dy: 1 },
-    "right":      { dx: 1, dy: 0 },
-    "none":       { dx: 0, dy: 0 },
-};
+const WebClient = require('./webClient.js');
 
 class GameLogic {
 
@@ -32,7 +24,7 @@ class GameLogic {
             id,
             x, 
             y,
-            DIRECTIONS["none"],
+            {dx: 0, dy: 0}
         );
         newPlayer.setRoom(this.rooms.get(0));
         this.players.set(id, newPlayer);
@@ -52,7 +44,7 @@ class GameLogic {
 
     addWebClient(id) {
         const newWebClient = new WebClient(id);
-        webClient.setRoom(this.rooms.get(0));
+        newWebClient.setRoom(this.rooms.get(0));
         this.webClients.set(id, newWebClient);
         return newWebClient;
     }
@@ -72,7 +64,7 @@ class GameLogic {
           let data = obj.data;
           switch (obj.type) {
             case "direction":
-                moveVector = DIRECTIONS[data.direction];
+                moveVector = data.direction;
                 if (moveVector) {
                     player.setMoveVector(moveVector);
                 }
@@ -86,7 +78,7 @@ class GameLogic {
     // Blucle de joc (funció que s'executa contínuament)
     updateGame(fps) {
         for (const player of this.players.values()) {
-            player.update(1 / fps);
+            player.update(1.0 / fps);
         }
     }
 

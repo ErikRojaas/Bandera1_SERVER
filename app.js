@@ -16,23 +16,27 @@ const game = new GameLogic(ws);
 let gameLoop = new GameLoop();
 
 // Pruebas en localhost, para produccion poner url servidor
-const apkUrl = `https://bandera1.ieti.site/android-debug.apk`;
+const apkUrl = `https://bandera1.ieti.site/public/android-debug.apk`;
 
 // Inicialitzar servidor Express
 const app = express();
 app.use(cors()); 
-app.use(express.static('web'));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "web")));
 
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "web", "index.html"))
-})
+// Public folder for static assets
+app.use('/public', express.static(path.join(__dirname, 'public')));
+
+// Flutter web app - serve static files
+app.use(express.static(path.join(__dirname, 'web')));
+
+// Catch-all route for Flutter app (SPA) - Handle client-side routing
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'web/index.html'));
+});
 
 // Inicialitzar servidor HTTP
 const httpServer = app.listen(port, async () => {
     console.log(`Servidor HTTP escoltant a: http://localhost:${port}`);
-
     try {
         await QRCode.toFile(path.join(__dirname, "public", "qrcode.png"), apkUrl, {
             width: 400,
