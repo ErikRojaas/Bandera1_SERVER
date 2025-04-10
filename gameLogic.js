@@ -19,11 +19,13 @@ class GameLogic {
     // Es connecta un client/jugador
     addPlayer(id) {
         let { x, y } = this.getInitialPosition();
+        const skinId = Math.floor(Math.random() * 4) + 1;
         const newPlayer = new Player(
             id,
             x, 
             y,
-            {dx: 0, dy: 0}
+            {dx: 0, dy: 0},
+            skinId
         );
         newPlayer.setRoom(this.rooms.get(0));
         this.players.set(id, newPlayer);
