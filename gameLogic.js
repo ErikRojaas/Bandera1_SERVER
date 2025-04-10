@@ -13,7 +13,6 @@ class GameLogic {
         this.rooms.set(0, new Room(0));
         this.rooms.get(0).addKey(new Key(0, 0, 0));
         this.ws = ws;
-
         this.webClients = new Map();
     }
 
