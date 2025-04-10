@@ -29,7 +29,7 @@ class GameLogic {
         newPlayer.setRoom(this.rooms.get(0));
         this.players.set(id, newPlayer);
         this.ws.sendTo(id, JSON.stringify({
-            type: "welcome",
+            type: "playerCount",
             data: this.rooms.get(0).players.length
         }));
         return newPlayer;
@@ -64,7 +64,7 @@ class GameLogic {
           let data = obj.data;
           switch (obj.type) {
             case "direction":
-                moveVector = data.direction;
+                const moveVector = data.direction;
                 if (moveVector) {
                     player.setMoveVector(moveVector);
                 }
