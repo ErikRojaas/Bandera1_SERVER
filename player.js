@@ -1,6 +1,6 @@
 
 class Player {
-    constructor(id, x, y, moveVector) {
+    constructor(id, x, y, moveVector, skinId) {
         this.id = id;
         this.x = x;
         this.y = y;
