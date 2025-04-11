@@ -1,6 +1,6 @@
 const WebSocket = require('ws')
 
-const socket = new WebSocket('ws://localhost:8081?type=mobile');
+const socket = new WebSocket('ws://localhost:8080?type=mobile');
 
 socket.addEventListener('open', (event) => {
     console.log('Connected to WebSocket server');
@@ -28,7 +28,19 @@ async function sendDirections() {
         socket.send(JSON.stringify({ type: "direction", data: { direction: { dx: 0, dy: 0 } } }));
         await wait(1000);
 
+        socket.send(JSON.stringify({ type: "direction", data: { direction: { dx: 100, dy: 0 } } }));
+        await wait(1000);
+
+        socket.send(JSON.stringify({ type: "direction", data: { direction: { dx: 0, dy: 0 } } }));
+        await wait(1000);0
+
         socket.send(JSON.stringify({ type: "direction", data: { direction: { dx: 0, dy: -100 } } }));
+        await wait(1000);
+
+        socket.send(JSON.stringify({ type: "direction", data: { direction: { dx: 0, dy: 0 } } }));
+        await wait(1000);
+
+        socket.send(JSON.stringify({ type: "direction", data: { direction: { dx: -100, dy: 0 } } }));
         await wait(1000);
 
         socket.send(JSON.stringify({ type: "direction", data: { direction: { dx: 0, dy: 0 } } }));

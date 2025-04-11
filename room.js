@@ -1,4 +1,5 @@
 key = require('./key.js');
+flag = require('./flag.js');
 class Room {
     constructor(id) {
         this.id = id;
@@ -9,6 +10,7 @@ class Room {
             [2, []],
             [3, []],
         ]);
+        this.flag = new flag(0, 0, 0);
         this.started = false;
         this.keys = [];
     }

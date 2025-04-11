@@ -11,7 +11,7 @@ class GameLogic {
         this.players = new Map();
         this.rooms = new Map();
         this.rooms.set(0, new Room(0));
-        this.rooms.get(0).addKey(new Key(0, 0, 0));
+        this.rooms.get(0).addKey(new Key(0, 50, 50));
         this.ws = ws;
         this.webClients = new Map();
     }
@@ -85,8 +85,8 @@ class GameLogic {
 
     getInitialPosition() {
         //Random
-        const x = Math.floor(Math.random() * (100)) - 50;
-        const y = Math.floor(Math.random() * (100)) - 50;
+        const x = Math.floor(Math.random() * (1000)) - 500;
+        const y = Math.floor(Math.random() * (1000)) - 500;
         return { x, y };
     }
 
@@ -100,7 +100,8 @@ class GameLogic {
                             .filter(player => player.id !== playerId) // not the same player
                             .filter(player => player.room === room) // same room
                             .map(player => player.getGameState()),
-            keys: room.keys.map(key => key.getGameState())
+            keys: room.keys.map(key => key.getGameState()),
+            flag: room.flag ? room.flag.getGameState() : null
         };
     }
 
@@ -111,7 +112,8 @@ class GameLogic {
             players: Array.from(this.players.values())
                             .filter(player => player.room === room) // same room
                             .map(player => player.getGameState()),
-            keys: room.keys.map(key => key.getGameState())
+            keys: room.keys.map(key => key.getGameState()),
+            flag: room.flag ? room.flag.getGameState() : null
         };
     }
 }
