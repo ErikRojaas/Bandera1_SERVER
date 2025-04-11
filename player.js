@@ -7,6 +7,7 @@ class Player {
         this.moveVector = moveVector;
         this.room = null;
         this.skinId = skinId;
+        this.hasKey = false;
     }
 
     update(deltaTime) {
@@ -33,7 +34,8 @@ class Player {
             x: this.x,
             y: this.y,
             moveVector: this.moveVector,
-            skinId: this.skinId
+            skinId: this.skinId,
+            hasKey: this.hasKey 
         };
     }
 }
