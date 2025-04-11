@@ -13,3 +13,5 @@ class Flag {
         };
     }
 }
+
+module.exports = Flag;
