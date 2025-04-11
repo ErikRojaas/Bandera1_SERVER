@@ -25,10 +25,13 @@ class Room {
         this.keys.push(key);
     }
 
-    removeKey(key) {
-        this.keys.splice(this.keys.indexOf(key), 1);
+    removeKeyById(keyId) {
+        const index = this.keys.findIndex(key => key.id.toString() === keyId.toString());
+        if (index !== -1) {
+            this.keys.splice(index, 1);
+            console.log(`Key ${keyId} removed from room ${this.id}`);
+        }
     }
-
     removePlayer(player) {
         this.players.splice(this.players.indexOf(player), 1);
         //TODO: Assign teams

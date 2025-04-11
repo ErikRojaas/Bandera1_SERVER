@@ -70,6 +70,13 @@ class GameLogic {
                     player.setMoveVector(moveVector);
                 }
                 break;
+            case "collect_key":
+                const keyId = data.keyId;
+                const room = player.room;
+                if (room) {
+                    room.removeKeyById(keyId);
+                }
+                break;
             default:
                 break;
           }
@@ -80,6 +87,20 @@ class GameLogic {
     updateGame(fps) {
         for (const player of this.players.values()) {
             player.update(1.0 / fps);
+            const room = player.room;
+            for (let key of room.keys) {
+                const dx = player.x - key.x;
+                const dy = player.y - key.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+    
+                if (distance < 30 && !player.hasKey) { // Umbral de colisión
+                    player.hasKey = true;
+                    key.collected = true;
+                }
+            }
+    
+            // Eliminar llaves recogidas
+            player.room.keys = player.room.keys.filter(key => !key.collected);
         }
     }
 
