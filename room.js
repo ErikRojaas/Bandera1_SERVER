@@ -10,7 +10,7 @@ class Room {
             [2, []],
             [3, []],
         ]);
-        this.flag = new flag(0, 0, 0);
+        this.flags = [new flag(0, 0, 0)];
         this.started = false;
         this.keys = [];
     }
