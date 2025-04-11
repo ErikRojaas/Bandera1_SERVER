@@ -98,9 +98,12 @@ class GameLogic {
                     key.collected = true;
                 }
             }
-    
             // Eliminar llaves recogidas
             player.room.keys = player.room.keys.filter(key => !key.collected);
+        }
+
+        for (const room of this.rooms.values()) {
+            room.update(deltaTime);
         }
     }
 
@@ -122,7 +125,8 @@ class GameLogic {
                             .filter(player => player.room === room) // same room
                             .map(player => player.getGameState()),
             keys: room.keys.map(key => key.getGameState()),
-            flag: room.flags.map(flag => flag.getGameState())
+            flags: room.flags.map(flag => flag.getGameState()),
+            room: room.getGameState()
         };
     }
 
