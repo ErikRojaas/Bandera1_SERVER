@@ -8,7 +8,7 @@ const cors = require("cors");
 
 
 const debug = true;
-const port = process.env.PORT || 8081;
+const port = process.env.PORT || 8080;
 
 // Inicialitzar WebSockets i la lògica del joc
 const ws = new webSockets();
