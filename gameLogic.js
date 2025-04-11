@@ -85,8 +85,9 @@ class GameLogic {
 
     // Blucle de joc (funció que s'executa contínuament)
     updateGame(fps) {
+        const deltaTime = 1.0 / fps;
         for (const player of this.players.values()) {
-            player.update(1.0 / fps);
+            player.update(deltaTime);
             const room = player.room;
             for (let key of room.keys) {
                 const dx = player.x - key.x;
