@@ -1,19 +1,17 @@
-// key.js
-class Key {
-    constructor(id, x, y) {
+class Flag {
+    constructor(id, x, y, skinId) {
         this.id = id;
         this.x = x;
         this.y = y;
-        this.collected = false;
     }
 
     getGameState() {
         return {
             id: this.id,
             x: this.x,
-            y: this.y
+            y: this.y,
         };
     }
 }
 
-module.exports = Key;
+module.exports = Flag;

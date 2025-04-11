@@ -11,25 +11,26 @@ class GameLogic {
         this.players = new Map();
         this.rooms = new Map();
         this.rooms.set(0, new Room(0));
-        this.rooms.get(0).addKey(new Key(0, 0, 0));
+        this.rooms.get(0).addKey(new Key(0, 50, 50));
         this.ws = ws;
-
         this.webClients = new Map();
     }
 
     // Es connecta un client/jugador
     addPlayer(id) {
         let { x, y } = this.getInitialPosition();
+        const skinId = Math.floor(Math.random() * 4) + 1;
         const newPlayer = new Player(
             id,
             x, 
             y,
-            {dx: 0, dy: 0}
+            {dx: 0, dy: 0},
+            skinId
         );
         newPlayer.setRoom(this.rooms.get(0));
         this.players.set(id, newPlayer);
         this.ws.sendTo(id, JSON.stringify({
-            type: "welcome",
+            type: "playerCount",
             data: this.rooms.get(0).players.length
         }));
         return newPlayer;
@@ -64,9 +65,16 @@ class GameLogic {
           let data = obj.data;
           switch (obj.type) {
             case "direction":
-                moveVector = data.direction;
+                const moveVector = data.direction;
                 if (moveVector) {
                     player.setMoveVector(moveVector);
+                }
+                break;
+            case "collect_key":
+                const keyId = data.keyId;
+                const room = player.room;
+                if (room) {
+                    room.removeKeyById(keyId);
                 }
                 break;
             default:
@@ -77,15 +85,33 @@ class GameLogic {
 
     // Blucle de joc (funció que s'executa contínuament)
     updateGame(fps) {
+        const deltaTime = 1.0 / fps;
         for (const player of this.players.values()) {
-            player.update(1.0 / fps);
+            player.update(deltaTime);
+            const room = player.room;
+            for (let key of room.keys) {
+                const dx = player.x - key.x;
+                const dy = player.y - key.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+    
+                if (distance < 30 && !player.hasKey) { // Umbral de colisión
+                    player.hasKey = true;
+                    key.collected = true;
+                }
+            }
+            // Eliminar llaves recogidas
+            player.room.keys = player.room.keys.filter(key => !key.collected);
+        }
+
+        for (const room of this.rooms.values()) {
+            room.update(deltaTime);
         }
     }
 
     getInitialPosition() {
         //Random
-        const x = Math.floor(Math.random() * (100)) - 50;
-        const y = Math.floor(Math.random() * (100)) - 50;
+        const x = Math.floor(Math.random() * (1000)) - 500;
+        const y = Math.floor(Math.random() * (1000)) - 500;
         return { x, y };
     }
 
@@ -99,7 +125,9 @@ class GameLogic {
                             .filter(player => player.id !== playerId) // not the same player
                             .filter(player => player.room === room) // same room
                             .map(player => player.getGameState()),
-            keys: room.keys.map(key => key.getGameState())
+            keys: room.keys.map(key => key.getGameState()),
+            flags: room.flags.map(flag => flag.getGameState()),
+            room: room.getGameState()
         };
     }
 
@@ -110,7 +138,8 @@ class GameLogic {
             players: Array.from(this.players.values())
                             .filter(player => player.room === room) // same room
                             .map(player => player.getGameState()),
-            keys: room.keys.map(key => key.getGameState())
+            keys: room.keys.map(key => key.getGameState()),
+            flags: room.flags.map(flag => flag.getGameState())
         };
     }
 }

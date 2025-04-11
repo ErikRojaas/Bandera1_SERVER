@@ -1,11 +1,13 @@
 
 class Player {
-    constructor(id, x, y, moveVector) {
+    constructor(id, x, y, moveVector, skinId) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.moveVector = moveVector;
         this.room = null;
+        this.skinId = skinId;
+        this.hasKey = false;
     }
 
     update(deltaTime) {
@@ -32,6 +34,8 @@ class Player {
             x: this.x,
             y: this.y,
             moveVector: this.moveVector,
+            skinId: this.skinId,
+            hasKey: this.hasKey 
         };
     }
 }
