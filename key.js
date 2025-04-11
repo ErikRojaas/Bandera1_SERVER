@@ -1,16 +1,17 @@
-
+// key.js
 class Key {
     constructor(id, x, y) {
         this.id = id;
-        this.x = x; 
+        this.x = x;
         this.y = y;
+        this.collected = false;
     }
 
     getGameState() {
         return {
             id: this.id,
             x: this.x,
-            y: this.y,
+            y: this.y
         };
     }
 }
