@@ -43,6 +43,7 @@ class Room {
     }
 
     update(deltaTime) {
+        this.justStarted = false;
         this.timer.tick(deltaTime);
     }
 
@@ -50,17 +51,22 @@ class Room {
         return {
             id: this.id,
             started: this.started,
+            start: this.started,
+            justStarted: this.justStarted,
             timer: this.timer.timeStr
         };
     }
 
     onFinish(timeStr) {
+        this.justStarted = true;
+        /*
        if (this.players.length > 1) {
            this.started = true;
        } else {
            this.started = false;
+           this.justStarted
            this.timer.reset();
-       }
+       }*/
     }
 }
 
