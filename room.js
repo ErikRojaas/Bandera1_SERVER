@@ -58,7 +58,13 @@ class Room {
     }
 
     onFinish(timeStr) {
-        this.justStarted = true;
+        this.started = !this.started;
+        if (this.started) {
+            this.justStarted = true;
+            this.timer.reset(60);
+        } else {
+            this.timer.reset(30);
+        }
         /*
        if (this.players.length > 1) {
            this.started = true;

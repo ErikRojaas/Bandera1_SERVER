@@ -34,6 +34,11 @@ class Timer {
         this.timeStr = this.getTimeStr(this.time);
     }
 
+    reset(duration) {
+        this.duration = duration;
+        this.reset();
+    }
+
 }
 
 module.exports = Timer;
