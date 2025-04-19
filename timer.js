@@ -11,7 +11,7 @@ class Timer {
 
     getTimeStr(time) {
         const minutes = Math.floor(time / 60);
-        const seconds = time % 60;
+        const seconds = Math.round(time % 60);
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     }
 
@@ -34,7 +34,7 @@ class Timer {
         this.timeStr = this.getTimeStr(this.time);
     }
 
-    reset(duration) {
+    setDuration(duration) {
         this.duration = duration;
         this.reset();
     }
