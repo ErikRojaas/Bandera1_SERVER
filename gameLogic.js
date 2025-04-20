@@ -104,7 +104,7 @@ class GameLogic {
                 }
             }
             // Puntos
-            if (flag.colidesWith(player.x, player.y)) {
+            if (room.started && flag.collidesWith(player.x, player.y)) {
                 player.points += 1*deltaTime;
             }
 
