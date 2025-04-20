@@ -7,7 +7,7 @@ const path = require("path");
 const cors = require("cors");
 
 
-const debug = true;
+const debug = false;
 const port = process.env.PORT || 8080;
 
 // Inicialitzar WebSockets i la lògica del joc
