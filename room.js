@@ -51,7 +51,6 @@ class Room {
         return {
             id: this.id,
             started: this.started,
-            start: this.started,
             justStarted: this.justStarted,
             timer: this.timer.timeStr
         };

@@ -7,6 +7,8 @@ const WebClient = require('./webClient.js');
 
 class GameLogic {
 
+    MAP_SIZE = { width: 1248, height: 672 };
+
     constructor(ws) {
         this.players = new Map();
         this.rooms = new Map();
@@ -18,7 +20,8 @@ class GameLogic {
 
     // Es connecta un client/jugador
     addPlayer(id) {
-        let { x, y } = this.getInitialPosition();
+        const targetRoom = this.rooms.get(0);
+        let { x, y } = this.getInitialPosition(targetRoom);
         const skinId = Math.floor(Math.random() * 4) + 1;
         const newPlayer = new Player(
             id,
@@ -27,11 +30,11 @@ class GameLogic {
             {dx: 0, dy: 0},
             skinId
         );
-        newPlayer.setRoom(this.rooms.get(0));
+        newPlayer.setRoom(targetRoom);
         this.players.set(id, newPlayer);
         this.ws.sendTo(id, JSON.stringify({
             type: "playerCount",
-            data: this.rooms.get(0).players.length
+            data: targetRoom.players.length
         }));
         return newPlayer;
     }
@@ -89,6 +92,7 @@ class GameLogic {
         for (const player of this.players.values()) {
             player.update(deltaTime);
             const room = player.room;
+            const flag = room.flags[0];
             for (let key of room.keys) {
                 const dx = player.x - key.x;
                 const dy = player.y - key.y;
@@ -99,6 +103,11 @@ class GameLogic {
                     key.collected = true;
                 }
             }
+            // Puntos
+            if (flag.colidesWith(player.x, player.y)) {
+                player.points += 1*deltaTime;
+            }
+
             // Eliminar llaves recogidas
             player.room.keys = player.room.keys.filter(key => !key.collected);
         }
@@ -108,10 +117,35 @@ class GameLogic {
         }
     }
 
-    getInitialPosition() {
-        //Random
-        const x = Math.floor(Math.random() * (1000)) - 500;
-        const y = Math.floor(Math.random() * (1000)) - 500;
+    getInitialPosition(room) {
+        const PADDING = 50;
+        const playerCount = room && room.players ? room.players.length : 0; 
+        const cornerIndex = playerCount % 4;
+
+        let x, y;
+
+        switch (cornerIndex) {
+            case 0: // Top-left
+                x = PADDING;
+                y = PADDING;
+                break;
+            case 1: // Bottom-right
+                x = this.MAP_SIZE.width - PADDING;
+                y = this.MAP_SIZE.height - PADDING;
+                break;
+            case 2: // Top-right
+                x = this.MAP_SIZE.width - PADDING;
+                y = PADDING;
+                break;
+            case 3: // Bottom-left
+                x = PADDING;
+                y = this.MAP_SIZE.height - PADDING;
+                break;
+            default: // Fallback
+                x = PADDING;
+                y = PADDING;
+        }
+
         return { x, y };
     }
 

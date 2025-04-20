@@ -1,4 +1,3 @@
-
 class Player {
     constructor(id, x, y, moveVector, skinId) {
         this.id = id;
@@ -8,6 +7,7 @@ class Player {
         this.room = null;
         this.skinId = skinId;
         this.hasKey = false;
+        this.points = 0;
     }
 
     update(deltaTime) {
@@ -35,7 +35,8 @@ class Player {
             y: this.y,
             moveVector: this.moveVector,
             skinId: this.skinId,
-            hasKey: this.hasKey 
+            hasKey: this.hasKey,
+            points: Math.round(this.points)
         };
     }
 }
