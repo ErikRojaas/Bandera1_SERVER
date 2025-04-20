@@ -27,7 +27,7 @@ class GameLogic {
             id,
             x, 
             y,
-            {dx: x, dy: y},
+            {dx: 0, dy: 0},
             skinId
         );
         newPlayer.setRoom(targetRoom);
