@@ -15,6 +15,7 @@ class Room {
         this.started = false;
         this.justStarted = false;
         this.keys = [];
+        this.lastWiner = null;
         this.timer = new Timer(null, this.onFinish.bind(this), 30);
     }
 
@@ -52,7 +53,8 @@ class Room {
             id: this.id,
             started: this.started,
             justStarted: this.justStarted,
-            timer: this.timer.timeStr
+            timer: this.timer.timeStr,
+            winner: this.lastWiner
         };
     }
 
@@ -63,6 +65,18 @@ class Room {
             this.timer.setDuration(60);
         } else {
             this.timer.setDuration(30);
+            let winner = "";
+            let points = 0;
+            for (let i = 0; i < this.players.length; i++) {
+                if (this.players[i].points > points) {
+                    winner = this.players[i].id;
+                    points = this.players[i].points;
+                }
+            }
+            for (let i = 0; i < this.players.length; i++) {
+                this.players[i].points = 0;
+            }
+            this.lastWiner = winner;
         }
         /*
        if (this.players.length > 1) {
