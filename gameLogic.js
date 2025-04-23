@@ -4,9 +4,7 @@ const Player = require('./player.js');
 const Room = require('./room.js');
 const Key = require ('./key.js')
 const WebClient = require('./webClient.js');
-const { insertPlayer } = require('./node-mongoDB/CreateColections.js');
-const mongoose = require('mongoose');
-const sendmail  = require('sendmail');
+const nodemailer = require('nodemailer');
 // Conectar a MongoDB
 class GameLogic {
 
@@ -19,7 +17,13 @@ class GameLogic {
         this.rooms.get(0).addKey(new Key(0, 50, 50));
         this.ws = ws;
         this.webClients = new Map();
-        mongoose.connect('mongodb://localhost:27018/bandera1', { useNewUrlParser: true, useUnifiedTopology: true });
+        this.transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'o.cursor09@gmail.com',
+                pass: 'ttdt zukv xgir pwxk'
+            }
+        });
     }
 
     // Es connecta un client/jugador
@@ -89,24 +93,25 @@ class GameLogic {
                 const email = data.email;
                 const password = data.password;
                 if (nickname && email && password) {
-                    //await insertPlayer(nickname, email, password);
-                    //send confirmation email
-
-                    sendmail({
+                    const mailOptions = {
                         from: 'noreply@bandera1.com',
                         to: email,
                         subject: 'Bandera1 - Confirmación de registro',
-                        html: 'Hola ' + nickname + ',\n\n' +
+                        text: 'Hola ' + nickname + ',\n\n' +
                             'Gracias por registrarte en Bandera1.\n\n' +
                             'Para iniciar tu sesión, haz click en el siguiente enlace:\n\n' +
                             'http://ieti.bandera1.site/validate?email=' + encodeURIComponent(email) + '\n\n' +
                             'Si no has solicitado este acceso, puedes ignorar este correo.\n\n' +
                             'Saludos,\n' +
                             'El equipo de Bandera1'
-                        }, function (err, reply) {
-                            console.log(err && err.stack)
-                            console.dir(reply)
-                        })
+                    };
+                    this.transporter.sendMail(mailOptions, (error, info) => {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log('Email sent: ' + info.response);
+                        }
+                    });
                 }
             default:
                 break;
