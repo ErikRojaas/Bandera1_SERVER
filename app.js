@@ -34,6 +34,11 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build/web', 'index.html'));
 });
 
+// Inicialitzar servidor HTTP
+const httpServer = app.listen(port, async () => {
+    console.log(`Servidor HTTP escoltant a: http://localhost:${port}`);
+});
+
 // Gestionar WebSockets
 ws.init(httpServer, port);
 
