@@ -4,7 +4,10 @@ const Player = require('./player.js');
 const Room = require('./room.js');
 const Key = require ('./key.js')
 const WebClient = require('./webClient.js');
-
+const { insertPlayer } = require('./node-mongoDB/CreateColections.js');
+const mongoose = require('mongoose');
+const nodemailer = require('nodemailer');
+// Conectar a MongoDB
 class GameLogic {
 
     MAP_SIZE = { width: 1248, height: 672 };
@@ -16,6 +19,8 @@ class GameLogic {
         this.rooms.get(0).addKey(new Key(0, 50, 50));
         this.ws = ws;
         this.webClients = new Map();
+        mongoose.connect('mongodb://localhost:27018/bandera1', { useNewUrlParser: true, useUnifiedTopology: true });
+        this.transporter = nodemailer.createTransport();
     }
 
     // Es connecta un client/jugador
@@ -59,7 +64,7 @@ class GameLogic {
     }
 
     // Tractar un missatge d'un client/jugador
-    handleMessage(id, msg) {
+    async handleMessage(id, msg) {
         try {
           let obj = JSON.parse(msg);
           if (!obj.type) return;
@@ -80,6 +85,26 @@ class GameLogic {
                     room.removeKeyById(keyId);
                 }
                 break;
+            case "register":
+                const nickname = data.nickname;
+                const email = data.email;
+                const password = data.password;
+                if (nickname && email && password) {
+                    await insertPlayer(nickname, email, password);
+                    //send confirmation email
+                    this.transporter.sendMail({
+                        from: '"Bandera1" <noreply@bandera1.com>',
+                        to: email,
+                        subject: 'Bandera1 - Confirmación de registro',
+                        text: 'Hola ' + nickname + ',\n\n' +
+                            'Gracias por registrarte en Bandera1.\n\n' +
+                            'Para iniciar tu sesión, haz click en el siguiente enlace:\n\n' +
+                            'http://ieti.bandera1.site/validate?email=' + encodeURIComponent(email) + '\n\n' +
+                            'Si no has solicitado este acceso, puedes ignorar este correo.\n\n' +
+                            'Saludos,\n' +
+                            'El equipo de Bandera1'
+                    });
+                }
             default:
                 break;
           }

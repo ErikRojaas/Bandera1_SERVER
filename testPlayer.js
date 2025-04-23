@@ -4,6 +4,18 @@ const socket = new WebSocket('ws://localhost:8081?type=mobile');
 
 socket.addEventListener('open', (event) => {
     console.log('Connected to WebSocket server');
+
+    // Send the register message when the connection is open
+    const registerData = {
+        type: 'register',
+        data: {
+            nickname: 'nick',
+            email: 'oscar.anuncio.basura@gmail.com',
+            password: '1234'
+        }
+    };
+
+    socket.send(JSON.stringify(registerData));
 });
 socket.addEventListener('message', (event) => {
 });
@@ -13,7 +25,7 @@ socket.addEventListener('error', (event) => {
 socket.addEventListener('close', (event) => {
     console.log('Disconnected from WebSocket server');
 });
-
+/*
 function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -48,4 +60,4 @@ async function sendDirections() {
     }
 }
 
-sendDirections();
+sendDirections();*/

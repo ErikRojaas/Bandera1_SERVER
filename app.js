@@ -5,6 +5,7 @@ const GameLoop = require('./utilsGameLoop.js');
 const QRCode = require("qrcode");
 const path = require("path");
 const cors = require("cors");
+const { validatePlayer } = require('./node-mongoDB/CreateColections.js');
 
 
 const debug = false;
@@ -28,6 +29,25 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Flutter web app - serve static files
 app.use(express.static(path.join(__dirname, 'web')));
+
+// Email validation route
+app.get('/validate', async (req, res) => {
+    try {
+        const email = req.query.email;
+        if (!email) {
+            return res.status(400).send('Email parameter is required');
+        }
+        
+        // Decode the email if it's URL-encoded
+        const decodedEmail = decodeURIComponent(email);
+        
+        await validatePlayer(decodedEmail);
+        return res.redirect('/?validated=true');
+    } catch (error) {
+        console.error('Error validating user:', error);
+        return res.status(500).send('Error validating account');
+    }
+});
 
 // Catch-all route for Flutter app (SPA) - Handle client-side routing
 app.get('/', (req, res) => {
