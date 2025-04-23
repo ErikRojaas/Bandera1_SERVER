@@ -1,6 +1,8 @@
 key = require('./key.js');
 const Flag = require ('./flag.js')
 const Timer = require('./timer.js')
+const mongoUtils = require('./mongoUtils.js');
+
 class Room {
     constructor(id) {
         this.id = id;
@@ -58,7 +60,7 @@ class Room {
         };
     }
 
-    onFinish(timeStr) {
+    async onFinish(timeStr) {
         this.started = !this.started;
         if (this.started) {
             this.justStarted = true;
@@ -67,12 +69,29 @@ class Room {
             this.timer.setDuration(30);
             let winner = "";
             let points = 0;
+            let totalPoints = 0;
             for (let i = 0; i < this.players.length; i++) {
+                totalPoints += this.players[i].points;
                 if (this.players[i].points > points) {
                     winner = this.players[i].id;
                     points = this.players[i].points;
                 }
             }
+
+            try {
+                await mongoUtils.insertarNuevaPartida(
+                    totalPoints,  // totalPuntos
+                    points,       // puntosGanador
+                    this.players.length, // jugadores
+                    0,            // idEquipoGanador (por ahora 0)
+                    0,            // muertesTotales (por ahora 0)
+                    0,            // banderasABaseTotal (por ahora 0)
+                    0             // espectadores (por ahora 0)
+                );
+            } catch (err) {
+                console.error('Error insertando partida en historial:', err);
+            }
+
             for (let i = 0; i < this.players.length; i++) {
                 this.players[i].points = 0;
             }
