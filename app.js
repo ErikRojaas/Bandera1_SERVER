@@ -8,7 +8,7 @@ const cors = require("cors");
 
 
 const debug = false;
-const port = process.env.PORT || 8081;
+const port = process.env.PORT || 8080;
 
 // Inicialitzar WebSockets i la lògica del joc
 const ws = new webSockets();
@@ -23,28 +23,15 @@ const app = express();
 app.use(cors()); 
 app.use(express.json());
 
-// Public folder for static assets
+// Serve public assets (optional)
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// Flutter web app - serve static files
-app.use(express.static(path.join(__dirname, 'web')));
+// Serve Flutter web app
+app.use(express.static(path.join(__dirname, 'build/web')));
 
-// Catch-all route for Flutter app (SPA) - Handle client-side routing
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'web/index.html'));
-});
-
-// Inicialitzar servidor HTTP
-const httpServer = app.listen(port, async () => {
-    console.log(`Servidor HTTP escoltant a: http://localhost:${port}`);
-    try {
-        await QRCode.toFile(path.join(__dirname, "public", "qrcode.png"), apkUrl, {
-            width: 400,
-        });
-        console.log("QR generado en /public/qrcode.png");
-    } catch (err) {
-        console.error("Error al generar el QR:", err);
-    }
+// Handle Flutter routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build/web', 'index.html'));
 });
 
 // Gestionar WebSockets
