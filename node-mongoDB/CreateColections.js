@@ -8,6 +8,7 @@ const jugadorSchema = new mongoose.Schema({
   idUsuario: { type: Number, required: true },
   username: { type: String, required: true },
   email: { type: String, required: true },
+  password: { type: String, required: true },
   telefono: { type: String, required: true },
   pais: { type: String, required: true },
   fechaRegistro: { type: String, required: true },
@@ -16,7 +17,8 @@ const jugadorSchema = new mongoose.Schema({
   derrotas: { type: Number, required: true },
   muertes: { type: Number, required: true },
   bajas: { type: Number, required: true },
-  banderasABase: { type: Number, required: true }
+  banderasABase: { type: Number, required: true },
+  validated: { type: Boolean, required: true }
 });
 
 const partidoSchema = new mongoose.Schema({
@@ -111,4 +113,24 @@ async function insertarDatos() {
   mongoose.connection.close();
 }
 
+async function insertPlayer(nickname, email, password) {
+  const user = new jugadores({
+    username: nickname,
+    email: email,
+    password: password,
+    validated: false
+  });
+
+  const result = await user.save();
+  console.log('User inserted:', result);
+}
+
+async function validatePlayer(email) {
+  const user = await jugadores.findOne({ email: email });
+  user.validated = true;
+  await user.save();
+}
+
 insertarDatos().catch(console.error);
+
+module.exports = { insertPlayer, validatePlayer };

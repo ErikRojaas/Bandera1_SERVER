@@ -8,6 +8,7 @@ class Player {
         this.skinId = skinId;
         this.hasKey = false;
         this.points = 0;
+        this.nickname = null;
     }
 
     update(deltaTime) {
@@ -36,7 +37,8 @@ class Player {
             moveVector: this.moveVector,
             skinId: this.skinId,
             hasKey: this.hasKey,
-            points: Math.round(this.points)
+            points: Math.round(this.points),
+            nickname: this.nickname == null ? "Guest + "+this.id : this.nickname
         };
     }
 }
