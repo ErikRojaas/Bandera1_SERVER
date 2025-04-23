@@ -23,20 +23,28 @@ const app = express();
 app.use(cors()); 
 app.use(express.json());
 
-// Serve public assets (optional)
+// Public folder for static assets
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// Serve Flutter web app
-app.use(express.static(path.join(__dirname, 'build/web')));
+// Flutter web app - serve static files
+app.use(express.static(path.join(__dirname, 'web')));
 
-// Handle Flutter routing
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build/web', 'index.html'));
+// Catch-all route for Flutter app (SPA) - Handle client-side routing
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'web/index.html'));
 });
 
 // Inicialitzar servidor HTTP
 const httpServer = app.listen(port, async () => {
     console.log(`Servidor HTTP escoltant a: http://localhost:${port}`);
+    try {
+        await QRCode.toFile(path.join(__dirname, "public", "qrcode.png"), apkUrl, {
+            width: 400,
+        });
+        console.log("QR generado en /public/qrcode.png");
+    } catch (err) {
+        console.error("Error al generar el QR:", err);
+    }
 });
 
 // Gestionar WebSockets
