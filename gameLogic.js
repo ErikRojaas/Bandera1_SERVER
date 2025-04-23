@@ -173,7 +173,8 @@ class GameLogic {
                             .filter(player => player.room === room) // same room
                             .map(player => player.getGameState()),
             keys: room.keys.map(key => key.getGameState()),
-            flags: room.flags.map(flag => flag.getGameState())
+            flags: room.flags.map(flag => flag.getGameState()),
+            room: room.getGameState()
         };
     }
 }

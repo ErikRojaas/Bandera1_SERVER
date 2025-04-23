@@ -1,6 +1,6 @@
 const WebSocket = require('ws')
 
-const socket = new WebSocket('ws://localhost:8080?type=mobile');
+const socket = new WebSocket('ws://localhost:8081?type=mobile');
 
 socket.addEventListener('open', (event) => {
     console.log('Connected to WebSocket server');
