@@ -6,7 +6,7 @@ const Key = require ('./key.js')
 const WebClient = require('./webClient.js');
 const { insertPlayer } = require('./node-mongoDB/CreateColections.js');
 const mongoose = require('mongoose');
-const nodemailer = require('nodemailer');
+const sendmail  = require('sendmail');
 // Conectar a MongoDB
 class GameLogic {
 
@@ -20,7 +20,6 @@ class GameLogic {
         this.ws = ws;
         this.webClients = new Map();
         mongoose.connect('mongodb://localhost:27018/bandera1', { useNewUrlParser: true, useUnifiedTopology: true });
-        this.transporter = nodemailer.createTransport();
     }
 
     // Es connecta un client/jugador
@@ -92,18 +91,22 @@ class GameLogic {
                 if (nickname && email && password) {
                     await insertPlayer(nickname, email, password);
                     //send confirmation email
-                    this.transporter.sendMail({
-                        from: '"Bandera1" <noreply@bandera1.com>',
+
+                    sendmail({
+                        from: 'noreply@bandera1.com',
                         to: email,
                         subject: 'Bandera1 - Confirmación de registro',
-                        text: 'Hola ' + nickname + ',\n\n' +
+                        html: 'Hola ' + nickname + ',\n\n' +
                             'Gracias por registrarte en Bandera1.\n\n' +
                             'Para iniciar tu sesión, haz click en el siguiente enlace:\n\n' +
                             'http://ieti.bandera1.site/validate?email=' + encodeURIComponent(email) + '\n\n' +
                             'Si no has solicitado este acceso, puedes ignorar este correo.\n\n' +
                             'Saludos,\n' +
                             'El equipo de Bandera1'
-                    });
+                        }, function (err, reply) {
+                            console.log(err && err.stack)
+                            console.dir(reply)
+                        })
                 }
             default:
                 break;
