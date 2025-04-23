@@ -5,7 +5,7 @@ const GameLoop = require('./utilsGameLoop.js');
 const QRCode = require("qrcode");
 const path = require("path");
 const cors = require("cors");
-const { validatePlayer } = require('./node-mongoDB/CreateColections.js');
+//const { validatePlayer } = require('./node-mongoDB/CreateColections.js');
 
 
 const debug = false;
@@ -31,7 +31,7 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'web')));
 
 // Email validation route
-app.get('/validate', async (req, res) => {
+/*app.get('/validate', async (req, res) => {
     try {
         const email = req.query.email;
         if (!email) {
@@ -47,7 +47,7 @@ app.get('/validate', async (req, res) => {
         console.error('Error validating user:', error);
         return res.status(500).send('Error validating account');
     }
-});
+});*/
 
 // Catch-all route for Flutter app (SPA) - Handle client-side routing
 app.get('/', (req, res) => {

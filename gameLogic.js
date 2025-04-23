@@ -89,7 +89,7 @@ class GameLogic {
                 const email = data.email;
                 const password = data.password;
                 if (nickname && email && password) {
-                    await insertPlayer(nickname, email, password);
+                    //await insertPlayer(nickname, email, password);
                     //send confirmation email
 
                     sendmail({
