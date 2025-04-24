@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+let isConnected = false;
+
 const counterSchema = new mongoose.Schema({
   _id: { type: String, required: true },
   seq: { type: Number, default: 0 }
@@ -74,7 +76,10 @@ const jugadoresEnEquipo = mongoose.models.JugadoresEnEquipo || mongoose.model('J
 
 
 async function connect() {
-  await mongoose.connect('mongodb://localhost:27017/bandera1');
+  if (!isConnected) {
+    await mongoose.connect('mongodb://localhost:27017/bandera1');
+    isConnected = true;
+  } 
 }
 
 // Insertar datos de prueba
