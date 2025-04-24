@@ -5,21 +5,19 @@ const GameLoop = require('./utilsGameLoop.js');
 const QRCode = require("qrcode");
 const path = require("path");
 const cors = require("cors");
-const { connectToDB, getPlayerNickname } = require('./mongoUtils.js');
+const { connectToDB, getPlayerNickname, validatePlayer } = require('./mongoUtils.js');
 
 // Connect to DB immediately
 connectToDB();
 
 const debug = false;
-const port = process.env.PORT || 8080;
+const port = 8080;
+const baseURL = `https://bandera1.ieti.site:${port}`; // Define baseURL
 
 // Inicialitzar WebSockets i la lògica del joc
 const ws = new webSockets();
-const game = new GameLogic(ws);
+const game = new GameLogic(ws, baseURL); // Pass baseURL to GameLogic
 let gameLoop = new GameLoop();
-
-// Pruebas en localhost, para produccion poner url servidor
-const apkUrl = `https://bandera1.ieti.site/public/android-debug.apk`;
 
 // Inicialitzar servidor Express
 const app = express();

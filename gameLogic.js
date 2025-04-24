@@ -11,12 +11,13 @@ class GameLogic {
 
     MAP_SIZE = { width: 1248, height: 672 };
 
-    constructor(ws) {
+    constructor(ws, baseURL) {
         this.players = new Map();
         this.rooms = new Map();
         this.rooms.set(0, new Room(0));
         this.rooms.get(0).addKey(new Key(0, 50, 50));
         this.ws = ws;
+        this.baseURL = baseURL;
         this.webClients = new Map();
         this.transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -103,7 +104,7 @@ class GameLogic {
                         text: 'Hola ' + nickname + ',\n\n' +
                             'Gracias por registrarte en Bandera1.\n\n' +
                             'Para iniciar tu sesión, haz click en el siguiente enlace:\n\n' +
-                            'http://ieti.bandera1.site/validate?email=' + encodeURIComponent(email)+ "&playerId=" + encodeURIComponent(id) + '\n\n' +
+                            `${this.baseURL}/validate?email=` + encodeURIComponent(email)+ "&playerId=" + encodeURIComponent(id) + '\n\n' +
                             'Si no has solicitado este acceso, puedes ignorar este correo.\n\n' +
                             'Saludos,\n' +
                             'El equipo de Bandera1'
