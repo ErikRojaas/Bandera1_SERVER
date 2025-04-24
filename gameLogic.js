@@ -98,6 +98,11 @@ class GameLogic {
                     this.ws.sendTo(id, JSON.stringify({ type: "login", data: { success: false, message: "Invalid credentials" } }));
                     return;
                 }
+                if (!await isUserValidated(email)) {
+                    this.ws.sendTo(id, JSON.stringify({ type: "login", data: { success: false, message: "Account not validated" } }));
+                    return;
+                }
+                //set player name
                 player.nickname = await getPlayerNickname(email);
                 this.ws.sendTo(id, JSON.stringify({ type: "login", data: { success: true, message: "Logged in successfully" } }));
                 break;

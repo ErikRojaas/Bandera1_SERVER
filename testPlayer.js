@@ -1,15 +1,14 @@
 const WebSocket = require('ws')
 
-const socket = new WebSocket('ws://localhost:8081?type=mobile');
+const socket = new WebSocket('ws://localhost:8080?type=mobile');
 
 socket.addEventListener('open', (event) => {
     console.log('Connected to WebSocket server');
 
     // Send the register message when the connection is open
     const registerData = {
-        type: 'register',
+        type: 'login',
         data: {
-            nickname: 'nick',
             email: 'oscar.anuncio.basura@gmail.com',
             password: '1234'
         }

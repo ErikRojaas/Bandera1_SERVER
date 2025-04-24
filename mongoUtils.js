@@ -173,5 +173,10 @@ async function emailExists(email) {
   return user ? true : false;
 }
 
+async functiom isUserValidated(email) {
+  const user = await jugadores.findOne({ email: email });
+  return user.validated;
+}
+
 
 module.exports = {correctCredentials, emailExists, getPlayerNickname, insertarNuevaPartida, insertPlayer, validatePlayer, connectToDB };
