@@ -5,7 +5,7 @@ const GameLoop = require('./utilsGameLoop.js');
 const QRCode = require("qrcode");
 const path = require("path");
 const cors = require("cors");
-const { connect } = require('./CreateColections.js');
+const { connectToDB } = require('./CreateColections.js');
 
 const debug = false;
 const port = process.env.PORT || 8080;
@@ -56,7 +56,7 @@ app.get('/', (req, res) => {
 // Inicialitzar servidor HTTP
 const httpServer = app.listen(port, async () => {
     console.log(`Servidor HTTP escoltant a: http://localhost:${port}`);
-    await connect();
+    await connectToDB();
 });
 
 // Gestionar WebSockets

@@ -75,69 +75,13 @@ const equipos = mongoose.models.Equipos || mongoose.model('Equipos', equipoSchem
 const jugadoresEnEquipo = mongoose.models.JugadoresEnEquipo || mongoose.model('JugadoresEnEquipo', jugadorEquipoSchema, 'JugadoresEnEquipo');
 
 
-async function connect() {
+async function connectToDB() {
   if (!isConnected) {
     await mongoose.connect('mongodb://localhost:27017/bandera1');
     isConnected = true;
   } 
 }
 
-// Insertar datos de prueba
-async function insertarDatos() {
-  const Jugadores = new jugadores({
-    idUsuario: 1,
-    username: 'player_one',
-    email: 'player_one@example.com',
-    telefono: '1234567890',
-    pais: 'España',
-    fechaRegistro: '2025-04-01 12:00:00',
-    nPartidas: 50,
-    victorias: 25,
-    derrotas: 15,
-    muertes: 30,
-    bajas: 40,
-    banderasABase: 10
-  });
-
-  const HistorialPartida = new historialPartida({
-    idPartida: 1,
-    fecha: '2025-04-10 16:00:00',
-    totalPuntos: 300,
-    puntosGanador: 150,
-    jugadores: 10,
-    idEquipoGanador: 1,
-    muertesTotales: 100,
-    banderasABaseTotal: 5,
-    espectadores: 20
-  });
-
-  const Equipos = new equipos({
-    idEquipo: 1,
-    victorias: 10,
-    derrotas: 5,
-    totalPuntos: 2500,
-    promedioPuntos: 250,
-    totalJugadores: 15
-  });
-
-  const JugadoresEnEquipo = new jugadoresEnEquipo({
-    idJugadorEquipo: 1,
-    idJugador: 1,
-    idEquipo: 1,
-    idPartida: 1,
-    ganada: true,
-    puntos: 250
-  });
-
-  // Guardar en la base de datos
-  await Jugadores.save();
-  await HistorialPartida.save();
-  await Equipos.save();
-  await JugadoresEnEquipo.save();
-
-  console.log('Datos insertados correctamente');
-  mongoose.connection.close();
-}
 
 async function insertPlayer(nickname, email, password) {
   const user = new jugadores({
@@ -165,4 +109,4 @@ async function validatePlayer(email) {
 }
 
 
-module.exports = { insertPlayer, validatePlayer, connect };
+module.exports = { insertPlayer, validatePlayer, connectToDB };
