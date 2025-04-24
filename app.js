@@ -5,7 +5,7 @@ const GameLoop = require('./utilsGameLoop.js');
 const QRCode = require("qrcode");
 const path = require("path");
 const cors = require("cors");
-const { connectToDB } = require('./CreateColections.js');
+const { connectToDB } = require('./mongoUtils.js');
 
 // Connect to DB immediately
 connectToDB();

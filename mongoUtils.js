@@ -19,6 +19,68 @@ const partidoSchema = new mongoose.Schema({
   espectadores: { type: Number, required: true }
 });
 
+const counterSchema = new mongoose.Schema({
+  _id: { type: String, required: true },
+  seq: { type: Number, default: 0 }
+});
+
+const Counter = mongoose.model('Counter', counterSchema);
+
+// Definir los esquemas
+const jugadorSchema = new mongoose.Schema({
+  idUsuario: { type: Number },
+  username: { type: String, required: true },
+  email: { type: String, required: true },
+  password: { type: String, required: true },
+  pais: { type: String, required: true },
+  fechaRegistro: { type: String, required: true },
+  nPartidas: { type: Number, required: true },
+  victorias: { type: Number, required: true },
+  derrotas: { type: Number, required: true },
+  muertes: { type: Number, required: true },
+  bajas: { type: Number, required: true },
+  banderasABase: { type: Number, required: true },
+  validated: { type: Boolean, required: true }
+});
+
+const equipoSchema = new mongoose.Schema({
+  idEquipo: { type: Number, required: true },
+  victorias: { type: Number, required: true },
+  totalPuntos: { type: Number, required: true },
+  promedioPuntos: { type: Number, required: true },
+  totalJugadores: { type: Number, required: true }
+});
+
+const jugadorEquipoSchema = new mongoose.Schema({
+  idJugadorEquipo: { type: Number, required: true },
+  idJugador: { type: Number, required: true },
+  idEquipo: { type: Number, required: true },
+  idPartida: { type: Number, required: true },
+  ganada: { type: Boolean, required: true },
+  puntos: { type: Number, required: true }
+});
+
+jugadorSchema.pre('save', async function (next) {
+  const doc = this;
+  if (doc.isNew) {
+    const counter = await Counter.findByIdAndUpdate(
+      { _id: 'jugadorId' },
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true }
+    );
+    doc.idUsuario = counter.seq;
+  }
+  next();
+});
+
+// Crear modelos con los nombres de colecciones específicas
+const jugadores = mongoose.models.Jugadores || mongoose.model('Jugadores', jugadorSchema, 'Jugadores');
+const historialPartida = mongoose.models.HistorialPartidas || mongoose.model('HistorialPartidas', partidoSchema, 'HistorialPartidas');
+const equipos = mongoose.models.Equipos || mongoose.model('Equipos', equipoSchema, 'Equipos');
+const jugadoresEnEquipo = mongoose.models.JugadoresEnEquipo || mongoose.model('JugadoresEnEquipo', jugadorEquipoSchema, 'JugadoresEnEquipo');
+
+
+
 // Crear el modelo
 const historialPartida = mongoose.model('HistorialPartidas', partidoSchema, 'HistorialPartidas');
 
