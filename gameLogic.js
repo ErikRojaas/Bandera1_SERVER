@@ -93,6 +93,7 @@ class GameLogic {
             case "register":
                 const nickname = data.nickname;
                 const email = data.email;
+                const password = data.password;
                 if (await emailExists(email)) {
                     this.ws.sendTo(id, JSON.stringify({ type: "register", data: { success: false, message: "Email already exists" } }));
                     return;
