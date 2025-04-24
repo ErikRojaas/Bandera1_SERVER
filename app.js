@@ -47,7 +47,7 @@ app.get('/validate', async (req, res) => {
         //set player name 
         const name = await getPlayerNickname(decodedEmail);
         game.players.get(decodedPlayerId).nickname = name;
-        res.send('Account validated successfully!'); // Send success response
+        res.sendFile(path.join(__dirname, 'public/validation_success.html')); // Send HTML file
     } catch (error) {
         console.error('Error validating user:', error);
         return res.status(500).send('Error validating account');
