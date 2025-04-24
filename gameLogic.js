@@ -4,7 +4,7 @@ const Player = require('./player.js');
 const Room = require('./room.js');
 const Key = require ('./key.js')
 const WebClient = require('./webClient.js');
-const { insertPlayer } = require('./node-mongoDB/CreateColections.js');
+const { insertPlayer } = require('./CreateColections.js');
 const nodemailer = require('nodemailer');
 // Conectar a MongoDB
 class GameLogic {

@@ -74,7 +74,7 @@ const jugadoresEnEquipo = mongoose.models.JugadoresEnEquipo || mongoose.model('J
 
 
 async function connect() {
-  await mongoose.connect('mongodb://localhost:27017/bandera1', {});
+  await mongoose.connect('mongodb://localhost:27017/bandera1');
 }
 
 // Insertar datos de prueba
