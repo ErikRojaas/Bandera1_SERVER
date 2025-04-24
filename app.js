@@ -5,7 +5,7 @@ const GameLoop = require('./utilsGameLoop.js');
 const QRCode = require("qrcode");
 const path = require("path");
 const cors = require("cors");
-const { connect } = require('./node-mongoDB/CreateColections.js');
+const { connect } = require('./CreateColections.js');
 
 const debug = false;
 const port = process.env.PORT || 8080;
