@@ -173,7 +173,7 @@ async function emailExists(email) {
   return user ? true : false;
 }
 
-async functiom isUserValidated(email) {
+async function isUserValidated(email) {
   const user = await jugadores.findOne({ email: email });
   return user.validated;
 }
