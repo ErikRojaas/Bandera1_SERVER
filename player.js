@@ -38,7 +38,7 @@ class Player {
             skinId: this.skinId,
             hasKey: this.hasKey,
             points: Math.round(this.points),
-            nickname: this.nickname == null ? "Guest + "+this.id : this.nickname
+            nickname: this.nickname == null ? "Guest "+this.id : this.nickname
         };
     }
 }
