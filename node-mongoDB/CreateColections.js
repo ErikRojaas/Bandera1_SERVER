@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 // Conectar a MongoDB
-mongoose.connect('mongodb://localhost:27018/bandera1', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost:27017/bandera1', { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 const counterSchema = new mongoose.Schema({
