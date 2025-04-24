@@ -138,6 +138,8 @@ async function insertPlayer(nickname, email, password) {
   console.log('User inserted:', result);
 }
 
+
+
 async function validatePlayer(email) {
   const user = await jugadores.findOne({ email: email });
   user.validated = true;
@@ -149,5 +151,10 @@ async function getPlayerNickname(email) {
   return user.username;
 }
 
+async function emailExists(email) {
+  const user = await jugadores.findOne({ email: email });
+  return user ? true : false;
+}
 
-module.exports = { getPlayerNickname, insertarNuevaPartida, insertPlayer, validatePlayer, connectToDB };
+
+module.exports = { emailExists, getPlayerNickname, insertarNuevaPartida, insertPlayer, validatePlayer, connectToDB };
