@@ -144,5 +144,10 @@ async function validatePlayer(email) {
   await user.save();
 }
 
+async function getPlayerNickname(email) {
+  const user = await jugadores.findOne({ email: email });
+  return user.username;
+}
 
-module.exports = { insertarNuevaPartida, insertPlayer, validatePlayer, connectToDB };
+
+module.exports = { getPlayerNickname, insertarNuevaPartida, insertPlayer, validatePlayer, connectToDB };

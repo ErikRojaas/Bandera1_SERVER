@@ -5,7 +5,7 @@ const GameLoop = require('./utilsGameLoop.js');
 const QRCode = require("qrcode");
 const path = require("path");
 const cors = require("cors");
-const { connectToDB } = require('./mongoUtils.js');
+const { connectToDB, getPlayerNickname } = require('./mongoUtils.js');
 
 // Connect to DB immediately
 connectToDB();
@@ -33,24 +33,27 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'web')));
 
 // Email validation route
-/*app.get('/validate', async (req, res) => {
+app.get('/validate', async (req, res) => {
     try {
         const email = req.query.email;
-        if (!email) {
+        const playerId = req.query.playerId;
+        if (!email || !playerId) {
             return res.status(400).send('Email parameter is required');
         }
         
         // Decode the email if it's URL-encoded
         const decodedEmail = decodeURIComponent(email);
+        const decodedPlayerId = decodeURIComponent(playerId);
         
         await validatePlayer(decodedEmail);
-        return res.redirect('/?validated=true');
+        //set player name 
+        const name = await getPlayerNickname(decodedEmail);
+        game.players.get(decodedPlayerId).nickname = name;
     } catch (error) {
         console.error('Error validating user:', error);
         return res.status(500).send('Error validating account');
     }
-});*/
-
+});
 // Catch-all route for Flutter app (SPA) - Handle client-side routing
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'web/index.html'));

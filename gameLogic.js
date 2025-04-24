@@ -103,7 +103,7 @@ class GameLogic {
                         text: 'Hola ' + nickname + ',\n\n' +
                             'Gracias por registrarte en Bandera1.\n\n' +
                             'Para iniciar tu sesión, haz click en el siguiente enlace:\n\n' +
-                            'http://ieti.bandera1.site/validate?email=' + encodeURIComponent(email) + '\n\n' +
+                            'http://ieti.bandera1.site/validate?email=' + encodeURIComponent(email)+ "&playerId=" + encodeURIComponent(id) + '\n\n' +
                             'Si no has solicitado este acceso, puedes ignorar este correo.\n\n' +
                             'Saludos,\n' +
                             'El equipo de Bandera1'
