@@ -1,10 +1,8 @@
 const mongoose = require('mongoose');
 const moment = require('moment-timezone');  // Importamos moment-timezone
 
-// Conectar a MongoDB
-mongoose.connect('mongodb://localhost:27018/bandera1', { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Conectado a MongoDB en puerto 27018, base de datos bandera1'))
-  .catch(err => console.error('Error al conectar a MongoDB:', err));
+let isConnected = false;
+
 
 // Definir el esquema de partida
 const partidoSchema = new mongoose.Schema({
@@ -79,11 +77,6 @@ const historialPartida = mongoose.models.HistorialPartidas || mongoose.model('Hi
 const equipos = mongoose.models.Equipos || mongoose.model('Equipos', equipoSchema, 'Equipos');
 const jugadoresEnEquipo = mongoose.models.JugadoresEnEquipo || mongoose.model('JugadoresEnEquipo', jugadorEquipoSchema, 'JugadoresEnEquipo');
 
-
-
-// Crear el modelo
-const historialPartida = mongoose.model('HistorialPartidas', partidoSchema, 'HistorialPartidas');
-
 // Función para insertar una nueva partida
 async function insertarNuevaPartida(totalPuntos, puntosGanador, jugadores, idEquipoGanador, muertesTotales, banderasABaseTotal, espectadores) {
   try {
@@ -111,4 +104,45 @@ async function insertarNuevaPartida(totalPuntos, puntosGanador, jugadores, idEqu
   }
 }
 
-module.exports = { insertarNuevaPartida };
+async function connectToDB() {
+  // 0 = disconnected, 1 = connected, 2 = connecting, 3 = disconnecting
+  if (mongoose.connection.readyState === 0) {
+    try {
+      await mongoose.connect('mongodb://localhost:27017/bandera1');
+      console.log("MongoDB connected successfully.");
+    } catch (error) {
+      console.error("MongoDB connection error:", error);
+      process.exit(1); // Exit process with failure
+    }
+  } else {
+    console.log("MongoDB already connected or connecting.");
+  }
+}
+
+async function insertPlayer(nickname, email, password) {
+  const user = new jugadores({
+    username: nickname,
+    email: email,
+    password: password,
+    pais: 'España',
+    fechaRegistro: new Date(),
+    nPartidas: 0,
+    victorias: 0,
+    derrotas: 0,
+    muertes: 0,
+    bajas: 0,
+    banderasABase: 0,
+    validated: false
+  });
+  const result = await user.save();
+  console.log('User inserted:', result);
+}
+
+async function validatePlayer(email) {
+  const user = await jugadores.findOne({ email: email });
+  user.validated = true;
+  await user.save();
+}
+
+
+module.exports = { insertarNuevaPartida, insertPlayer, validatePlayer, connectToDB };
