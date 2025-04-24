@@ -71,10 +71,10 @@ jugadorSchema.pre('save', async function (next) {
 });
 
 // Crear modelos con los nombres de colecciones específicas
-const jugadores = mongoose.model('Jugadores', jugadorSchema, 'Jugadores');
-const historialPartida = mongoose.model('HistorialPartidas', partidoSchema, 'HistorialPartidas');
-const equipos = mongoose.model('Equipos', equipoSchema, 'Equipos');
-const jugadoresEnEquipo = mongoose.model('JugadoresEnEquipo', jugadorEquipoSchema, 'JugadoresEnEquipo');
+const Jugador = mongoose.models.Jugadores  mongoose.model('Jugadores', jugadorSchema, 'Jugadores');
+const HistorialPartida = mongoose.models.HistorialPartidas  mongoose.model('HistorialPartidas', partidoSchema, 'HistorialPartidas');
+const Equipo = mongoose.models.Equipos  mongoose.model('Equipos', equipoSchema, 'Equipos');
+const JugadoresEnEquipo = mongoose.models.JugadoresEnEquipo  mongoose.model('JugadoresEnEquipo', jugadorEquipoSchema, 'JugadoresEnEquipo');
 
 // Insertar datos de prueba
 async function insertarDatos() {
