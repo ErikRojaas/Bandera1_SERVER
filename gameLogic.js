@@ -143,7 +143,9 @@ class GameLogic {
             default:
                 break;
           }
-        } catch (error) {}
+        } catch (error) {
+            console.error('Error handling message:', error);
+        }
     }
 
     // Blucle de joc (funció que s'executa contínuament)
