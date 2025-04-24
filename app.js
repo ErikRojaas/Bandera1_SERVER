@@ -7,6 +7,9 @@ const path = require("path");
 const cors = require("cors");
 const { connectToDB } = require('./CreateColections.js');
 
+// Connect to DB immediately
+connectToDB();
+
 const debug = false;
 const port = process.env.PORT || 8080;
 
@@ -56,7 +59,6 @@ app.get('/', (req, res) => {
 // Inicialitzar servidor HTTP
 const httpServer = app.listen(port, async () => {
     console.log(`Servidor HTTP escoltant a: http://localhost:${port}`);
-    await connectToDB();
 });
 
 // Gestionar WebSockets

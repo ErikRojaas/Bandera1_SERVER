@@ -76,10 +76,18 @@ const jugadoresEnEquipo = mongoose.models.JugadoresEnEquipo || mongoose.model('J
 
 
 async function connectToDB() {
-  if (!isConnected) {
-    await mongoose.connect('mongodb://localhost:27017/bandera1');
-    isConnected = true;
-  } 
+  // 0 = disconnected, 1 = connected, 2 = connecting, 3 = disconnecting
+  if (mongoose.connection.readyState === 0) {
+    try {
+      await mongoose.connect('mongodb://localhost:27017/bandera1');
+      console.log("MongoDB connected successfully.");
+    } catch (error) {
+      console.error("MongoDB connection error:", error);
+      process.exit(1); // Exit process with failure
+    }
+  } else {
+    console.log("MongoDB already connected or connecting.");
+  }
 }
 
 
