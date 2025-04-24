@@ -159,6 +159,5 @@ async function validatePlayer(email) {
   await user.save();
 }
 
-insertarDatos().catch(console.error);
 
 module.exports = { insertPlayer, validatePlayer };
