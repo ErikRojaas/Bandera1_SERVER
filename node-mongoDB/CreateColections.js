@@ -1,11 +1,5 @@
 const mongoose = require('mongoose');
 
-// Conectar a MongoDB
-if (!mongoose.connection.readyState) {
-  mongoose.connect('mongodb://localhost:27017/bandera1', { useNewUrlParser: true, useUnifiedTopology: true });
-}
-
-
 const counterSchema = new mongoose.Schema({
   _id: { type: String, required: true },
   seq: { type: Number, default: 0 }
@@ -78,6 +72,10 @@ const historialPartida = mongoose.models.HistorialPartidas || mongoose.model('Hi
 const equipos = mongoose.models.Equipos || mongoose.model('Equipos', equipoSchema, 'Equipos');
 const jugadoresEnEquipo = mongoose.models.JugadoresEnEquipo || mongoose.model('JugadoresEnEquipo', jugadorEquipoSchema, 'JugadoresEnEquipo');
 
+
+async function connect() {
+  await mongoose.connect('mongodb://localhost:27017/bandera1', {});
+}
 
 // Insertar datos de prueba
 async function insertarDatos() {
@@ -162,4 +160,4 @@ async function validatePlayer(email) {
 }
 
 
-module.exports = { insertPlayer, validatePlayer };
+module.exports = { insertPlayer, validatePlayer, connect };

@@ -5,8 +5,7 @@ const GameLoop = require('./utilsGameLoop.js');
 const QRCode = require("qrcode");
 const path = require("path");
 const cors = require("cors");
-const mongoose = require('mongoose');
-//const { validatePlayer } = require('./node-mongoDB/CreateColections.js');
+const { connect } = require('./node-mongoDB/CreateColections.js');
 
 const debug = false;
 const port = process.env.PORT || 8080;
@@ -18,63 +17,6 @@ let gameLoop = new GameLoop();
 
 // Pruebas en localhost, para produccion poner url servidor
 const apkUrl = `https://bandera1.ieti.site/public/android-debug.apk`;
-
-// Conexión MongoDB
-mongoose.connect('mongodb://localhost:27018/bandera1', { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Conectado a MongoDB (bandera1)'))
-  .catch(err => console.error('Error al conectar a MongoDB:', err));
-
-// Definición de esquemas y modelos
-const jugadorSchema = new mongoose.Schema({
-  idUsuario: Number,
-  username: String,
-  email: String,
-  telefono: String,
-  pais: String,
-  fechaRegistro: String,
-  nPartidas: Number,
-  victorias: Number,
-  derrotas: Number,
-  muertes: Number,
-  bajas: Number,
-  banderasABase: Number
-});
-
-const partidoSchema = new mongoose.Schema({
-  idPartida: Number,
-  fecha: String,
-  totalPuntos: Number,
-  puntosGanador: Number,
-  jugadores: Number,
-  idEquipoGanador: Number,
-  muertesTotales: Number,
-  banderasABaseTotal: Number,
-  espectadores: Number
-});
-
-const equipoSchema = new mongoose.Schema({
-  idEquipo: Number,
-  victorias: Number,
-  totalPuntos: Number,
-  promedioPuntos: Number,
-  totalJugadores: Number
-});
-
-const jugadorEquipoSchema = new mongoose.Schema({
-  idJugadorEquipo: Number,
-  idJugador: Number,
-  idEquipo: Number,
-  idPartida: Number,
-  ganada: Boolean,
-  puntos: Number
-});
-
-// Modelos
-const Jugador = mongoose.models.Jugadores || mongoose.model('Jugadores', jugadorSchema, 'Jugadores');
-const HistorialPartida = mongoose.models.HistorialPartidas || mongoose.model('HistorialPartidas', partidoSchema, 'HistorialPartidas');
-const Equipo = mongoose.models.Equipos || mongoose.model('Equipos', equipoSchema, 'Equipos');
-const JugadoresEnEquipo = mongoose.models.JugadoresEnEquipo || mongoose.model('JugadoresEnEquipo', jugadorEquipoSchema, 'JugadoresEnEquipo');
-
 
 // Inicialitzar servidor Express
 const app = express();
@@ -111,36 +53,10 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'web/index.html'));
 });
 
-app.get('/getDataDB', async (req, res) => {
-    try {
-      const jugadores = await Jugador.find();
-      const partidas = await HistorialPartida.find();
-      const equipos = await Equipo.find();
-      const jugadoresEnEquipos = await JugadoresEnEquipo.find();
-  
-      res.json({
-        jugadores,
-        partidas,
-        equipos,
-        jugadoresEnEquipos
-      });
-    } catch (error) {
-      console.error('Error al obtener datos de MongoDB:', error);
-      res.status(500).json({ error: 'Error al obtener datos de la base de datos' });
-    }
-  });
-
 // Inicialitzar servidor HTTP
 const httpServer = app.listen(port, async () => {
     console.log(`Servidor HTTP escoltant a: http://localhost:${port}`);
-    try {
-        await QRCode.toFile(path.join(__dirname, "public", "qrcode.png"), apkUrl, {
-            width: 400,
-        });
-        console.log("QR generado en /public/qrcode.png");
-    } catch (err) {
-        console.error("Error al generar el QR:", err);
-    }
+    await connect();
 });
 
 // Gestionar WebSockets
