@@ -77,6 +77,20 @@ const historialPartida = mongoose.models.HistorialPartidas || mongoose.model('Hi
 const equipos = mongoose.models.Equipos || mongoose.model('Equipos', equipoSchema, 'Equipos');
 const jugadoresEnEquipo = mongoose.models.JugadoresEnEquipo || mongoose.model('JugadoresEnEquipo', jugadorEquipoSchema, 'JugadoresEnEquipo');
 
+function getFormattedDateTime() {
+  const now = new Date();
+  
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
 // Función para insertar una nueva partida
 async function insertarNuevaPartida(totalPuntos, puntosGanador, jugadores, idEquipoGanador, muertesTotales, banderasABaseTotal, espectadores) {
   try {
@@ -125,7 +139,7 @@ async function insertPlayer(nickname, email, password) {
     email: email,
     password: password,
     pais: 'España',
-    fechaRegistro: new Date(),
+    fechaRegistro: getFormattedDateTime(),
     nPartidas: 0,
     victorias: 0,
     derrotas: 0,
@@ -138,7 +152,10 @@ async function insertPlayer(nickname, email, password) {
   console.log('User inserted:', result);
 }
 
-
+async function correctCredentials(email, password) {
+  const user = await jugadores.findOne({ email: email });
+  return user && user.password === password;
+}
 
 async function validatePlayer(email) {
   const user = await jugadores.findOne({ email: email });
@@ -157,4 +174,4 @@ async function emailExists(email) {
 }
 
 
-module.exports = { emailExists, getPlayerNickname, insertarNuevaPartida, insertPlayer, validatePlayer, connectToDB };
+module.exports = {correctCredentials, emailExists, getPlayerNickname, insertarNuevaPartida, insertPlayer, validatePlayer, connectToDB };
