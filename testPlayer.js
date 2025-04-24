@@ -18,6 +18,7 @@ socket.addEventListener('open', (event) => {
     socket.send(JSON.stringify(registerData));
 });
 socket.addEventListener('message', (event) => {
+    console.log('Received message from server:', event.data);
 });
 socket.addEventListener('error', (event) => {
     console.error('WebSocket error:', event);
