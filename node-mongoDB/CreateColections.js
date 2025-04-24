@@ -3,13 +3,20 @@ const mongoose = require('mongoose');
 // Conectar a MongoDB
 mongoose.connect('mongodb://localhost:27018/bandera1', { useNewUrlParser: true, useUnifiedTopology: true });
 
+
+const counterSchema = new mongoose.Schema({
+  _id: { type: String, required: true },
+  seq: { type: Number, default: 0 }
+});
+
+const Counter = mongoose.model('Counter', counterSchema);
+
 // Definir los esquemas
 const jugadorSchema = new mongoose.Schema({
-  idUsuario: { type: Number, required: true },
+  idUsuario: { type: Number },
   username: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
-  telefono: { type: String, required: true },
   pais: { type: String, required: true },
   fechaRegistro: { type: String, required: true },
   nPartidas: { type: Number, required: true },
@@ -48,6 +55,19 @@ const jugadorEquipoSchema = new mongoose.Schema({
   idPartida: { type: Number, required: true },
   ganada: { type: Boolean, required: true },
   puntos: { type: Number, required: true }
+});
+
+jugadorSchema.pre('save', async function (next) {
+  const doc = this;
+  if (doc.isNew) {
+    const counter = await Counter.findByIdAndUpdate(
+      { _id: 'jugadorId' },
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true }
+    );
+    doc.idUsuario = counter.seq;
+  }
+  next();
 });
 
 // Crear modelos con los nombres de colecciones específicas
@@ -118,9 +138,16 @@ async function insertPlayer(nickname, email, password) {
     username: nickname,
     email: email,
     password: password,
+    pais: 'España',
+    fechaRegistro: new Date(),
+    nPartidas: 0,
+    victorias: 0,
+    derrotas: 0,
+    muertes: 0,
+    bajas: 0,
+    banderasABase: 0,
     validated: false
   });
-
   const result = await user.save();
   console.log('User inserted:', result);
 }

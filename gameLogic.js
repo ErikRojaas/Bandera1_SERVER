@@ -4,6 +4,7 @@ const Player = require('./player.js');
 const Room = require('./room.js');
 const Key = require ('./key.js')
 const WebClient = require('./webClient.js');
+const { insertPlayer } = require('./node-mongoDB/CreateColections.js');
 const nodemailer = require('nodemailer');
 // Conectar a MongoDB
 class GameLogic {
@@ -92,6 +93,8 @@ class GameLogic {
                 const nickname = data.nickname;
                 const email = data.email;
                 const password = data.password;
+                await insertPlayer(nickname, email, password);
+
                 if (nickname && email && password) {
                     const mailOptions = {
                         from: 'noreply@bandera1.com',
