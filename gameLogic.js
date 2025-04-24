@@ -95,7 +95,7 @@ class GameLogic {
                 const email = data.email;
                 const password = data.password;
                 const emilUsed = await getPlayerNickname(email);
-                if (emilUsed) {
+                if (!emilUsed) {
                     this.ws.sendTo(id, JSON.stringify({ type: "register", data: { success: false, message: "Email already used" } }));
                     return;
                 }
