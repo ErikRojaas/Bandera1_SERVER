@@ -12,7 +12,7 @@ connectToDB();
 
 const debug = false;
 const port = 8080;
-const baseURL = `https://bandera1.ieti.site:${port}`; // Define baseURL
+const baseURL = `http://bandera1.ieti.site:${port}`; // Use http://
 
 // Inicialitzar WebSockets i la lògica del joc
 const ws = new webSockets();
