@@ -179,4 +179,4 @@ async function isUserValidated(email) {
 }
 
 
-module.exports = {correctCredentials, emailExists, getPlayerNickname, insertarNuevaPartida, insertPlayer, validatePlayer, connectToDB };
+module.exports = {isUserValidated, correctCredentials, emailExists, getPlayerNickname, insertarNuevaPartida, insertPlayer, validatePlayer, connectToDB };
