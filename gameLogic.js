@@ -91,19 +91,19 @@ class GameLogic {
                 }
                 break;
             case "login":
-                const email = data.email;
-                const password = data.password;
+                const loginEmail = data.email;
+                const loginPassword = data.password;
                 //check credentials
-                if (!await correctCredentials(email, password)) {
+                if (!await correctCredentials(loginEmail, loginPassword)) {
                     this.ws.sendTo(id, JSON.stringify({ type: "login", data: { success: false, message: "Invalid credentials" } }));
                     return;
                 }
-                if (!await isUserValidated(email)) {
+                if (!await isUserValidated(loginEmail)) {
                     this.ws.sendTo(id, JSON.stringify({ type: "login", data: { success: false, message: "Account not validated" } }));
                     return;
                 }
                 //set player name
-                player.nickname = await getPlayerNickname(email);
+                player.nickname = await getPlayerNickname(loginEmail);
                 this.ws.sendTo(id, JSON.stringify({ type: "login", data: { success: true, message: "Logged in successfully" } }));
                 break;
             case "register":
