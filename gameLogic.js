@@ -4,7 +4,7 @@ const Player = require('./player.js');
 const Room = require('./room.js');
 const Key = require ('./key.js')
 const WebClient = require('./webClient.js');
-const { insertPlayer } = require('./mongoUtils.js');
+const { insertPlayer, getPlayerNickname} = require('./mongoUtils.js');
 const nodemailer = require('nodemailer');
 // Conectar a MongoDB
 class GameLogic {
@@ -94,6 +94,12 @@ class GameLogic {
                 const nickname = data.nickname;
                 const email = data.email;
                 const password = data.password;
+                const emilUsed = await getPlayerNickname(email);
+                if (emilUsed) {
+                    this.ws.sendTo(id, JSON.stringify({ type: "register", data: { success: false, message: "Email already used" } }));
+                    return;
+                }
+
                 await insertPlayer(nickname, email, password);
 
                 if (nickname && email && password) {
@@ -117,6 +123,7 @@ class GameLogic {
                         }
                     });
                 }
+                this.ws.sendTo(id, JSON.stringify({ type: "register", data: { success: true, message: "Account created successfully" } }));
             default:
                 break;
           }
