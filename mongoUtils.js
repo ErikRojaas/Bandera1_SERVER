@@ -143,7 +143,7 @@ async function connectToDB() {
   }
 }
 
-async function insertPlayer(nickname, email, password, phone ip) {
+async function insertPlayer(nickname, email, password, phone, ip) {
   const user = new jugadores({
     username: nickname,
     email: email,
