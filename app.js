@@ -53,6 +53,10 @@ app.get('/validate', async (req, res) => {
         return res.status(500).send('Error validating account');
     }
 });
+
+app.get('/terms_of_services', async (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/terms_of_services.html'));
+});
 // Catch-all route for Flutter app (SPA) - Handle client-side routing
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'web/index.html'));
