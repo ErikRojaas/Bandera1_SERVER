@@ -80,6 +80,7 @@ const jugadoresEnEquipo = mongoose.models.JugadoresEnEquipo || mongoose.model('J
 
 
 function getCountryFromIP(ip) {
+  console.log("Ip used: " + ip);
   const geo = geoip.lookup(ip);
   return geo ? geo.country : 'Unknown';
 }
