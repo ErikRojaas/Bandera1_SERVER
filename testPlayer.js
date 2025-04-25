@@ -7,8 +7,9 @@ socket.addEventListener('open', (event) => {
 
     // Send the register message when the connection is open
     const registerData = {
-        type: 'login',
+        type: 'register',
         data: {
+            nickname: 'Oscar',
             email: 'oscar.anuncio.basura@gmail.com',
             password: '1234'
         }
