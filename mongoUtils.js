@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const moment = require('moment-timezone');  // Importamos moment-timezone
+const geoip = require('geoip-lite');
 
 let isConnected = false;
 
@@ -77,6 +78,13 @@ const historialPartida = mongoose.models.HistorialPartidas || mongoose.model('Hi
 const equipos = mongoose.models.Equipos || mongoose.model('Equipos', equipoSchema, 'Equipos');
 const jugadoresEnEquipo = mongoose.models.JugadoresEnEquipo || mongoose.model('JugadoresEnEquipo', jugadorEquipoSchema, 'JugadoresEnEquipo');
 
+
+function getCountryFromIP(ip) {
+  const geo = geoip.lookup(ip);
+  return geo ? geo.country : 'Unknown';
+}
+
+
 function getFormattedDateTime() {
   const now = new Date();
   
@@ -133,12 +141,12 @@ async function connectToDB() {
   }
 }
 
-async function insertPlayer(nickname, email, password) {
+async function insertPlayer(nickname, email, password, ip) {
   const user = new jugadores({
     username: nickname,
     email: email,
     password: password,
-    pais: 'España',
+    pais: getCountryFromIP(ip),
     fechaRegistro: getFormattedDateTime(),
     nPartidas: 0,
     victorias: 0,

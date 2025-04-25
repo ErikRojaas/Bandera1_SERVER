@@ -32,7 +32,8 @@ class UtilsWebSockets {
         const connectionType = parameters.type;
         // Generar ID únic per al client
         const id = "C" + uuidv4().substring(0, 5).toUpperCase();
-        const metadata = { id , connectionType};
+        const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress;
+        const metadata = { id , connectionType, ip };
         this.socketsClients.set(con, metadata);
 
         if (this.onConnection && typeof this.onConnection === "function") {

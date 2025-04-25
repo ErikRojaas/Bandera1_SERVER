@@ -110,12 +110,14 @@ class GameLogic {
                 const nickname = data.nickname;
                 const email = data.email;
                 const password = data.password;
+                const ip = this.ws.getClientData(id).ip;
+
                 if (await emailExists(email)) {
                     this.ws.sendTo(id, JSON.stringify({ type: "register", data: { success: false, message: "Email already exists" } }));
                     return;
                 }
 
-                await insertPlayer(nickname, email, password);
+                await insertPlayer(nickname, email, password, ip);
 
                 if (nickname && email && password) {
                     const mailOptions = {
