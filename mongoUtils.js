@@ -31,6 +31,7 @@ const jugadorSchema = new mongoose.Schema({
   username: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
+  phone: { type: String, required: true },
   pais: { type: String, required: true },
   fechaRegistro: { type: String, required: true },
   nPartidas: { type: Number, required: true },
@@ -142,12 +143,13 @@ async function connectToDB() {
   }
 }
 
-async function insertPlayer(nickname, email, password, ip) {
+async function insertPlayer(nickname, email, password, phone ip) {
   const user = new jugadores({
     username: nickname,
     email: email,
     password: password,
     pais: getCountryFromIP(ip),
+    phone: phone,
     fechaRegistro: getFormattedDateTime(),
     nPartidas: 0,
     victorias: 0,
