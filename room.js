@@ -1,6 +1,6 @@
-key = require('./key.js');
-const Flag = require ('./flag.js')
-const Timer = require('./timer.js')
+const Key = require('./key.js');
+const Flag = require('./flag.js');
+const Timer = require('./timer.js');
 const mongoUtils = require('./mongoUtils.js');
 
 class Room {
@@ -8,10 +8,10 @@ class Room {
         this.id = id;
         this.players = [];
         this.teams = new Map([
-            [0, []],
-            [1, []],
-            [2, []],
-            [3, []],
+            [0, []], // Lornwood
+            [1, []], // Vileswamp
+            [2, []], // Asharid
+            [3, []], // Ironhold
         ]);
         this.flags = [new Flag(0, 0, 0)];
         this.started = false;
@@ -23,8 +23,23 @@ class Room {
 
     addPlayer(player) {
         this.players.push(player);
-        //TODO: Assign teams
-        this.teams.get(0).push(player);
+        // Ahora añadimos al equipo correspondiente usando su teamId
+        if (this.teams.has(player.teamId)) {
+            this.teams.get(player.teamId).push(player);
+        } else {
+            console.error(`Team ID ${player.teamId} no encontrado.`);
+        }
+    }
+
+    removePlayer(player) {
+        this.players.splice(this.players.indexOf(player), 1);
+        if (this.teams.has(player.teamId)) {
+            const teamPlayers = this.teams.get(player.teamId);
+            const index = teamPlayers.indexOf(player);
+            if (index !== -1) {
+                teamPlayers.splice(index, 1);
+            }
+        }
     }
 
     addKey(key) {
@@ -37,12 +52,6 @@ class Room {
             this.keys.splice(index, 1);
             console.log(`Key ${keyId} removed from room ${this.id}`);
         }
-    }
-
-    removePlayer(player) {
-        this.players.splice(this.players.indexOf(player), 1);
-        //TODO: Assign teams
-        this.teams.get(0).splice(this.teams.get(0).indexOf(player), 1);
     }
 
     update(deltaTime) {
@@ -80,13 +89,13 @@ class Room {
 
             try {
                 await mongoUtils.insertarNuevaPartida(
-                    totalPoints,  // totalPuntos
-                    points,       // puntosGanador
-                    this.players.length, // jugadores
-                    0,            // idEquipoGanador (por ahora 0)
-                    0,            // muertesTotales (por ahora 0)
-                    0,            // banderasABaseTotal (por ahora 0)
-                    0             // espectadores (por ahora 0)
+                    totalPoints,
+                    points,
+                    this.players.length,
+                    0,
+                    0,
+                    0,
+                    0
                 );
             } catch (err) {
                 console.error('Error insertando partida en historial:', err);
@@ -96,15 +105,16 @@ class Room {
                 this.players[i].points = 0;
             }
             this.lastWiner = winner;
-        }
+        }        
         /*
-       if (this.players.length > 1) {
-           this.started = true;
-       } else {
-           this.started = false;
-           this.justStarted
-           this.timer.reset();
-       }*/
+        if (this.players.length > 1) {
+            this.started = true;
+        } else {
+            this.started = false;
+            this.justStarted
+            this.timer.reset();
+        }*/
+ 
     }
 }
 

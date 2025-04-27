@@ -31,23 +31,31 @@ class GameLogic {
     // Es connecta un client/jugador
     addPlayer(id) {
         const targetRoom = this.rooms.get(0);
-        let { x, y } = this.getInitialPosition(targetRoom);
+        const { x, y, teamId } = this.getInitialPosition(targetRoom);
+    
         const skinId = Math.floor(Math.random() * 4) + 1;
+    
         const newPlayer = new Player(
             id,
-            x, 
+            x,
             y,
-            {dx: 0, dy: 0},
+            { dx: 0, dy: 0 },
             skinId
         );
+    
+        newPlayer.teamId = teamId; // Nuevo: Asignamos el teamId
         newPlayer.setRoom(targetRoom);
+    
         this.players.set(id, newPlayer);
+    
         this.ws.sendTo(id, JSON.stringify({
             type: "playerCount",
             data: targetRoom.players.length
         }));
+    
         return newPlayer;
     }
+    
 
     // Es desconnecta un client/jugador
     removePlayer(id) {
@@ -169,8 +177,19 @@ class GameLogic {
                 }
             }
             // Puntos
-            if (room.started && flag.collidesWith(player.x, player.y)) {
-                player.points += 1*deltaTime;
+            if (room.started) {
+                // Si NO tiene la bandera todavía pero colisiona con ella
+                if (!player.hasFlag && flag.collidesWith(player.x, player.y)) {
+                    player.hasFlag = true;
+                    // Opción: mueves la bandera a -9999 para que "desaparezca"
+                    flag.x = -9999;
+                    flag.y = -9999;
+                }
+    
+                // Si el jugador tiene la bandera, gana puntos
+                if (player.hasFlag) {
+                    player.points += 1 * deltaTime;
+                }
             }
 
             // Eliminar llaves recogidas
@@ -184,35 +203,41 @@ class GameLogic {
 
     getInitialPosition(room) {
         const PADDING = 50;
-        const playerCount = room && room.players ? room.players.length : 0; 
-        const cornerIndex = playerCount % 4;
-
-        let x, y;
-
+        const playerCount = room && room.players ? room.players.length : 0;
+        const cornerIndex = playerCount % 4; // Decide esquina
+    
+        let x, y, teamId;
+    
         switch (cornerIndex) {
-            case 0: // Top-left
-                x = PADDING;
-                y = PADDING;
-                break;
-            case 1: // Bottom-right
-                x = this.MAP_SIZE.width - PADDING;
-                y = this.MAP_SIZE.height - PADDING;
-                break;
-            case 2: // Top-right
-                x = this.MAP_SIZE.width - PADDING;
-                y = PADDING;
-                break;
-            case 3: // Bottom-left
+            case 0: // Top-left → Lornwood
                 x = PADDING;
                 y = this.MAP_SIZE.height - PADDING;
+                teamId = 0;
                 break;
-            default: // Fallback
+            case 1: // Top-right → Vileswamp
+                x = this.MAP_SIZE.width - PADDING;
+                y = this.MAP_SIZE.height - PADDING;
+                teamId = 1;
+                break;
+            case 2: // Bottom-left → Asharid
                 x = PADDING;
                 y = PADDING;
+                teamId = 2;
+                break;
+            case 3: // Bottom-right → Ironhold
+                x = this.MAP_SIZE.width - PADDING;
+                y = PADDING;
+                teamId = 3;
+                break;
+            default: // fallback
+                x = PADDING;
+                y = PADDING;
+                teamId = 0;
         }
-
-        return { x, y };
+    
+        return { x, y, teamId };
     }
+    
 
     // Retorna l'estat del joc (sense el objecte del client amb id playerId)
     getGameStateForPlayer(playerId) {

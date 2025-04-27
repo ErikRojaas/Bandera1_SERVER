@@ -1,5 +1,5 @@
 class Player {
-    constructor(id, x, y, moveVector, skinId) {
+    constructor(id, x, y, moveVector, skinId, teamId = 0) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -7,8 +7,11 @@ class Player {
         this.room = null;
         this.skinId = skinId;
         this.hasKey = false;
+        this.hasFlag = false;
         this.points = 0;
         this.nickname = null;
+        this.teamId = teamId; // Nuevo
+        this.teamName = this.getTeamNameById(teamId); // Nuevo
     }
 
     update(deltaTime) {
@@ -37,9 +40,22 @@ class Player {
             moveVector: this.moveVector,
             skinId: this.skinId,
             hasKey: this.hasKey,
+            hasFlag: this.hasFlag,
             points: Math.round(this.points),
-            nickname: this.nickname == null ? "Guest "+this.id : this.nickname
+            nickname: this.nickname == null ? "Guest " + this.id : this.nickname,
+            teamId: this.teamId,
+            teamName: this.teamName
         };
+    }
+
+    getTeamNameById(teamId) {
+        switch (teamId) {
+            case 0: return "Lornwood";
+            case 1: return "Vileswamp";
+            case 2: return "Asharid";
+            case 3: return "Ironhold";
+            default: return "Unknown";
+        }
     }
 }
 
