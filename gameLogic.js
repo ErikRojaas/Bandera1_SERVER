@@ -40,10 +40,9 @@ class GameLogic {
             x,
             y,
             { dx: 0, dy: 0 },
-            skinId
+            skinId,
+            teamId 
         );
-    
-        newPlayer.teamId = teamId; // Nuevo: Asignamos el teamId
         newPlayer.setRoom(targetRoom);
     
         this.players.set(id, newPlayer);
