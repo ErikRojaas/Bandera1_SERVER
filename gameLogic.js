@@ -167,14 +167,16 @@ class GameLogic {
             const flag = room.flags[0];
     
             // MOVIMIENTO Y COLISIONES CON KEYS
-            for (let key of room.keys) {
+            for (let i = room.keys.length - 1; i >= 0; i--) {
+                const key = room.keys[i];
                 const dx = player.x - key.x;
                 const dy = player.y - key.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
-    
+            
                 if (distance < 30 && !player.hasKey) {
                     player.hasKey = true;
-                    key.collected = true;
+                    room.keys.splice(i, 1);
+                    break; 
                 }
             }
     
