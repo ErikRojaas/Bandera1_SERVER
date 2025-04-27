@@ -23,7 +23,6 @@ class Room {
 
     addPlayer(player) {
         this.players.push(player);
-        // Ahora añadimos al equipo correspondiente usando su teamId
         if (this.teams.has(player.teamId)) {
             this.teams.get(player.teamId).push(player);
         } else {
@@ -72,13 +71,16 @@ class Room {
     async onFinish(timeStr) {
         this.started = !this.started;
         if (this.started) {
+            // Comienza partida
             this.justStarted = true;
-            this.timer.setDuration(60);
+            this.timer.setDuration(60); // 60 segundos de partida
         } else {
-            this.timer.setDuration(30);
+            // Termina partida
+            this.timer.setDuration(30); // 30 segundos de espera para próxima partida
             let winner = "";
             let points = 0;
             let totalPoints = 0;
+
             for (let i = 0; i < this.players.length; i++) {
                 totalPoints += this.players[i].points;
                 if (this.players[i].points > points) {
@@ -101,12 +103,35 @@ class Room {
                 console.error('Error insertando partida en historial:', err);
             }
 
+            // Enviar mensaje gameOver
+            const winnerPlayer = this.players.find(p => p.id === winner);
+            const winnerTeamId = winnerPlayer ? winnerPlayer.teamId : null;
+            const winnerTeamName = this.getTeamName(winnerTeamId);
+
+            this.players.forEach(player => {
+                if (player.socket && player.socket.readyState === 1) {
+                    player.socket.send(JSON.stringify({
+                        type: "gameOver",
+                        winner: winnerTeamName,
+                        winnerId: winner
+                    }));
+                }
+            });
+
+            // Reset jugadores
             for (let i = 0; i < this.players.length; i++) {
                 this.players[i].points = 0;
+                this.players[i].hasKey = false;
+                this.players[i].hasFlag = false;
             }
+
             this.lastWiner = winner;
-        }        
-        /*
+
+            // Resetear llaves y bandera
+            this.keys = [];
+            this.flags = [new Flag(0, 0, 0)];
+        }
+                /*
         if (this.players.length > 1) {
             this.started = true;
         } else {
@@ -114,7 +139,16 @@ class Room {
             this.justStarted
             this.timer.reset();
         }*/
- 
+    }
+
+    getTeamName(teamId) {
+        switch (teamId) {
+            case 0: return "Lornwood";
+            case 1: return "Vileswamp";
+            case 2: return "Asharid";
+            case 3: return "Ironhold";
+            default: return "Unknown";
+        }
     }
 }
 
