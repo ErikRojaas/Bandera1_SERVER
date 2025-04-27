@@ -73,10 +73,10 @@ class Room {
         if (this.started) {
             // Comienza partida
             this.justStarted = true;
-            this.timer.setDuration(60); // 60 segundos de partida
+            this.timer.setDuration(20); // 60 segundos de partida
         } else {
             // Termina partida
-            this.timer.setDuration(30); // 30 segundos de espera para próxima partida
+            this.timer.setDuration(10); // 30 segundos de espera para próxima partida
             let winner = "";
             let points = 0;
             let totalPoints = 0;
