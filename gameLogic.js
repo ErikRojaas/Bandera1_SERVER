@@ -167,6 +167,7 @@ class GameLogic {
             const room = player.room;
             const flag = room.flags[0];
             for (let key of room.keys) {
+                flag.update(deltaTime);
                 const dx = player.x - key.x;
                 const dy = player.y - key.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
@@ -177,6 +178,7 @@ class GameLogic {
                 }
             }
             // Puntos
+            flag.update(deltaTime);
             if (room.started) {
                 // Si NO tiene la bandera todavía pero colisiona con ella
                 if (!player.hasFlag && flag.collidesWith(player.x, player.y)) {
