@@ -166,42 +166,41 @@ class GameLogic {
             player.update(deltaTime);
             const room = player.room;
             const flag = room.flags[0];
+    
+            // MOVIMIENTO Y COLISIONES CON KEYS
             for (let key of room.keys) {
-                flag.update(deltaTime);
                 const dx = player.x - key.x;
                 const dy = player.y - key.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
     
-                if (distance < 30 && !player.hasKey) { // Umbral de colisión
+                if (distance < 30 && !player.hasKey) {
                     player.hasKey = true;
                     key.collected = true;
                 }
             }
-            // Puntos
-            flag.update(deltaTime);
+    
+            // COLISION CON FLAG
             if (room.started) {
-                // Si NO tiene la bandera todavía pero colisiona con ella
                 if (!player.hasFlag && flag.collidesWith(player.x, player.y)) {
                     player.hasFlag = true;
-                    // Opción: mueves la bandera a -9999 para que "desaparezca"
                     flag.x = -9999;
                     flag.y = -9999;
                 }
     
-                // Si el jugador tiene la bandera, gana puntos
                 if (player.hasFlag) {
                     player.points += 1 * deltaTime;
                 }
             }
-
-            // Eliminar llaves recogidas
+    
+            // ELIMINAR LLAVES
             player.room.keys = player.room.keys.filter(key => !key.collected);
         }
-
+    
         for (const room of this.rooms.values()) {
             room.update(deltaTime);
         }
     }
+    
 
     getInitialPosition(room) {
         const PADDING = 50;
