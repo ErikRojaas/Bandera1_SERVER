@@ -15,7 +15,7 @@ class GameLogic {
         this.players = new Map();
         this.rooms = new Map();
         this.rooms.set(0, new Room(0));
-        this.rooms.get(0).addKey(new Key(0, 50, 50));
+        this.rooms.get(0).addKey(new Key(0, 100, 100));
         this.ws = ws;
         this.baseURL = baseURL;
         this.webClients = new Map();
@@ -178,7 +178,7 @@ class GameLogic {
                 const dy = player.y - key.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
             
-                if (distance < 30 && !player.hasKey) {
+                if (distance < 20 && !player.hasKey) {
                     player.hasKey = true;
                     room.keys.splice(i, 1);
                     break; 
