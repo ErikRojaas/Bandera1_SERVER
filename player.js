@@ -46,6 +46,8 @@ class Player {
             x: this.x,
             y: this.y,
             moveVector: this.moveVector,
+            speedVector: this.hasFlag ? {speedX: this.moveVector.dx * this.PLAYER_FLAG_SPEED, speedY: this.moveVector.dy * this.PLAYER_FLAG_SPEED} :
+                {speedX: this.moveVector.dx * this.PLAYER_SPEED, speedY: this.moveVector.dy * this.PLAYER_SPEED},
             skinId: this.skinId,
             hasKey: this.hasKey,
             hasFlag: this.hasFlag,
