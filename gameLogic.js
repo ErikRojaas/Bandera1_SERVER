@@ -86,19 +86,7 @@ class GameLogic {
           switch (obj.type) {
             case "direction":
                 const moveVector = data.direction;
-                const position = data.position;
-                if (moveVector) {
-                    const magnitude = Math.sqrt(moveVector.dx * moveVector.dx + moveVector.dy * moveVector.dy);
-                    if (magnitude > 0) {
-                        moveVector.dx /= magnitude;
-                        moveVector.dy /= magnitude;
-                    }
-                    player.setMoveVector(moveVector);
-                }
-                if (position) {
-                    player.x = position.x;
-                    player.y = position.y;
-                }
+                player.setMoveVector(moveVector);
                 break;
             case "collect_key":
                 const keyId = data.keyId;
