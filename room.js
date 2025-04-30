@@ -118,6 +118,13 @@ class Room {
                 }
             }
 
+            this.keys = [
+                new Key(0, 400, 400),
+                new Key(1, 1800, 400),
+                new Key(2, 400, 1250),
+                new Key(3, 1800, 1250)
+            ];
+
             this.timer.setDuration(20); // 60 segundos de partida
         } else {
             // Termina partida
