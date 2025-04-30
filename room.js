@@ -120,9 +120,7 @@ class Room {
 
             // Reset jugadores
             for (let i = 0; i < this.players.length; i++) {
-                this.players[i].points = 0;
-                this.players[i].hasKey = false;
-                this.players[i].hasFlag = false;
+                this.players[i].reset();
             }
 
             this.lastWiner = winner;

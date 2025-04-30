@@ -57,6 +57,15 @@ class Player {
             default: return "Unknown";
         }
     }
+
+    reset() {
+        this.x = 0;
+        this.y = 0;
+        this.moveVector = { dx: 0, dy: 0 };
+        this.hasKey = false;
+        this.hasFlag = false;
+        this.points = 0;
+    }
 }
 
 module.exports = Player;
