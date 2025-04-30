@@ -31,14 +31,14 @@ class GameLogic {
     // Es connecta un client/jugador
     addPlayer(id) {
         const targetRoom = this.rooms.get(0);
-        const { x, y, teamId } = this.getInitialPosition(targetRoom);
+        teamId = targetRoom.getNextTeamId();
     
         const skinId = Math.floor(Math.random() * 4) + 1;
     
         const newPlayer = new Player(
             id,
-            x,
-            y,
+            0,
+            0,
             { dx: 0, dy: 0 },
             skinId,
             teamId 
@@ -200,45 +200,6 @@ class GameLogic {
         }
     }
     
-
-    getInitialPosition(room) {
-        const PADDING = 50;
-        const playerCount = room && room.players ? room.players.length : 0;
-        const cornerIndex = playerCount % 4; // Decide esquina
-    
-        let x, y, teamId;
-    
-        switch (cornerIndex) {
-            case 0: // Top-left → Lornwood
-                x = PADDING;
-                y = this.MAP_SIZE.height - PADDING;
-                teamId = 0;
-                break;
-            case 1: // Top-right → Vileswamp
-                x = this.MAP_SIZE.width - PADDING;
-                y = this.MAP_SIZE.height - PADDING;
-                teamId = 1;
-                break;
-            case 2: // Bottom-left → Asharid
-                x = PADDING;
-                y = PADDING;
-                teamId = 2;
-                break;
-            case 3: // Bottom-right → Ironhold
-                x = this.MAP_SIZE.width - PADDING;
-                y = PADDING;
-                teamId = 3;
-                break;
-            default: // fallback
-                x = PADDING;
-                y = PADDING;
-                teamId = 0;
-        }
-    
-        return { x, y, teamId };
-    }
-    
-
     // Retorna l'estat del joc (sense el objecte del client amb id playerId)
     getGameStateForPlayer(playerId) {
         const player = this.players.get(playerId);

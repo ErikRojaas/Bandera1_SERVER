@@ -18,7 +18,7 @@ class Room {
         this.justStarted = false;
         this.keys = [];
         this.lastWiner = null;
-        this.timer = new Timer(null, this.onFinish.bind(this), 30);
+        this.timer = new Timer(null, this.onFinish.bind(this), 5);
     }
 
     addPlayer(player) {
@@ -28,6 +28,19 @@ class Room {
         } else {
             console.error(`Team ID ${player.teamId} no encontrado.`);
         }
+    }
+
+    getNextTeamId() {
+        let minPlayers = Infinity;
+        let nextTeamId = 0;
+
+        for (const [teamId, players] of this.teams) {
+            if (players.length < minPlayers) {
+                minPlayers = players.length;
+                nextTeamId = teamId;
+            }
+        }
+        return nextTeamId;
     }
 
     removePlayer(player) {
@@ -73,6 +86,35 @@ class Room {
         if (this.started) {
             // Comienza partida
             this.justStarted = true;
+            // Resetear jugadores
+            for (let i = 0; i < this.players.length; i++) {
+                this.players[i].reset();
+            }
+            // Setear la posición inicial de los jugadores segun el equipo
+            for (let i = 0; i < this.players.length; i++) {
+                switch (this.players[i].teamId) {
+                    case 0:
+                        this.players[i].x = 3000;
+                        this.players[i].y = 2000;
+                        break;
+                    case 1:
+                        this.players[i].x = -3000;
+                        this.players[i].y = -2000;
+                        break;
+                    case 2:
+                        this.players[i].x = 3000;
+                        this.players[i].y = -2000;
+                        break;
+                    case 3:
+                        this.players[i].x = -3000;
+                        this.players[i].y = 2000;
+                        break;
+                    default:
+                        this.players[i].x = 0;
+                        this.players[i].y = 0;
+                }
+            }
+
             this.timer.setDuration(20); // 60 segundos de partida
         } else {
             // Termina partida
