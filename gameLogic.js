@@ -31,7 +31,7 @@ class GameLogic {
     // Es connecta un client/jugador
     addPlayer(id) {
         const targetRoom = this.rooms.get(0);
-        teamId = targetRoom.getNextTeamId();
+        const teamId = targetRoom.getNextTeamId();
     
         const skinId = Math.floor(Math.random() * 4) + 1;
     
