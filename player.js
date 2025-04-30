@@ -1,4 +1,7 @@
 class Player {
+    PLAYER_SPEED = 300;
+    PLAYER_FLAG_SPEED = 150;
+        
     constructor(id, x, y, moveVector, skinId, teamId = 0) {
         this.id = id;
         this.x = x;
@@ -15,8 +18,13 @@ class Player {
     }
 
     update(deltaTime) {
-        this.x += this.moveVector.dx * deltaTime;
-        this.y += this.moveVector.dy * deltaTime;
+        if (this.hasFlag) {
+            this.moveVector.dx *= this.PLAYER_FLAG_SPEED * deltaTime;
+            this.moveVector.dy *= this.PLAYER_FLAG_SPEED * deltaTime;
+        } else {
+            this.moveVector.dx *= this.PLAYER_SPEED * deltaTime;
+            this.moveVector.dy *= this.PLAYER_SPEED * deltaTime;
+        }
     }
 
     setMoveVector(moveVector) {
