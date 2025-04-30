@@ -4,6 +4,9 @@ const Timer = require('./timer.js');
 const mongoUtils = require('./mongoUtils.js');
 
 class Room {
+
+    MAP_SIZE = {width: 2275, heigth: 1760};
+
     constructor(id) {
         this.id = id;
         this.players = [];
@@ -94,20 +97,20 @@ class Room {
             for (let i = 0; i < this.players.length; i++) {
                 switch (this.players[i].teamId) {
                     case 0:
-                        this.players[i].x = 3000;
-                        this.players[i].y = 2000;
+                        this.players[i].x = this.MAP_SIZE.width
+                        this.players[i].y = this.MAP_SIZE.heigth
                         break;
                     case 1:
-                        this.players[i].x = -3000;
-                        this.players[i].y = -2000;
+                        this.players[i].x = -this.MAP_SIZE.width
+                        this.players[i].y = -this.MAP_SIZE.heigth
                         break;
                     case 2:
-                        this.players[i].x = 3000;
-                        this.players[i].y = -2000;
+                        this.players[i].x = this.MAP_SIZE.width
+                        this.players[i].y = -this.MAP_SIZE.heigth
                         break;
                     case 3:
-                        this.players[i].x = -3000;
-                        this.players[i].y = 2000;
+                        this.players[i].x = -this.MAP_SIZE.width
+                        this.players[i].y = this.MAP_SIZE.heigth
                         break;
                     default:
                         this.players[i].x = 0;
