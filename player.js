@@ -19,11 +19,11 @@ class Player {
 
     update(deltaTime) {
         if (this.hasFlag) {
-            this.moveVector.dx *= this.PLAYER_FLAG_SPEED * deltaTime;
-            this.moveVector.dy *= this.PLAYER_FLAG_SPEED * deltaTime;
+            this.x += this.moveVector.dx * this.PLAYER_FLAG_SPEED * deltaTime;
+            this.y += this.moveVector.dy * this.PLAYER_FLAG_SPEED * deltaTime;
         } else {
-            this.moveVector.dx *= this.PLAYER_SPEED * deltaTime;
-            this.moveVector.dy *= this.PLAYER_SPEED * deltaTime;
+            this.x += this.moveVector.dx * this.PLAYER_SPEED * deltaTime;
+            this.y += this.moveVector.dy * this.PLAYER_SPEED * deltaTime;
         }
     }
 
