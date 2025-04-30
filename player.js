@@ -28,7 +28,9 @@ class Player {
     }
 
     setMoveVector(moveVector) {
-        this.moveVector = moveVector;
+        this.moveVector = {dx: moveVector.dx, dy: moveVector.dy};
+        console.log(moveVector);
+        console.log(this.moveVector);
     }
 
     setRoom(room) {
