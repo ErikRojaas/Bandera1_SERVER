@@ -7,9 +7,6 @@ const WebClient = require('./webClient.js');
 const { insertPlayer, emailExists, correctCredentials, getPlayerNickname, isUserValidated } = require('./mongoUtils.js');
 const nodemailer = require('nodemailer');
 // Conectar a MongoDB
-
-const PLAYER_SPEED = 300;
-const PLAYER_FLAG_SPEED = 150;
 class GameLogic {
 
     MAP_SIZE = { width: 1248, height: 672 };
@@ -88,14 +85,14 @@ class GameLogic {
           let data = obj.data;
           switch (obj.type) {
             case "direction":
-                const magnitude = Math.sqrt(moveVector.dx * moveVector.dx + moveVector.dy * moveVector.dy);
-                if (magnitude > 0) {
-                    moveVector.dx /= magnitude;
-                    moveVector.dy /= magnitude;
-                }
                 const moveVector = data.direction;
                 const position = data.position;
                 if (moveVector) {
+                    const magnitude = Math.sqrt(moveVector.dx * moveVector.dx + moveVector.dy * moveVector.dy);
+                    if (magnitude > 0) {
+                        moveVector.dx /= magnitude;
+                        moveVector.dy /= magnitude;
+                    }
                     player.setMoveVector(moveVector);
                 }
                 if (position) {
