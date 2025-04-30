@@ -5,7 +5,7 @@ const mongoUtils = require('./mongoUtils.js');
 
 class Room {
 
-    MAP_SIZE = {width: 2275, heigth: 1760};
+    MAP_SIZE = {width: 2275, heigth: 1650};
 
     constructor(id) {
         this.id = id;
