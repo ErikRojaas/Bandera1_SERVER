@@ -12,6 +12,7 @@
     "bandera1_server": "file:",
     "cors": "^2.8.5",
     "express": "^5.1.0",
+    "geoip-lite": "^1.4.10",
     "moment-timezone": "^0.5.48",
     "mongodb": "^6.15.0",
     "mongoose": "^8.13.2",

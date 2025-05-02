@@ -98,16 +98,20 @@ class GameLogic {
             case "login":
                 const loginEmail = data.email;
                 const loginPassword = data.password;
+                console.log("login: email: " + loginEmail + " password: " + loginPassword);
                 //check credentials
                 if (!await correctCredentials(loginEmail, loginPassword)) {
+                    console.log("login: incorrect credentials");
                     this.ws.sendTo(id, JSON.stringify({ type: "login", data: { success: false, message: "Invalid credentials" } }));
                     return;
                 }
                 if (!await isUserValidated(loginEmail)) {
+                    console.log("login: account not validated");
                     this.ws.sendTo(id, JSON.stringify({ type: "login", data: { success: false, message: "Account not validated" } }));
                     return;
                 }
                 //set player name
+                console.log("login: setting player name");
                 player.nickname = await getPlayerNickname(loginEmail);
                 this.ws.sendTo(id, JSON.stringify({ type: "login", data: { success: true, message: "Logged in successfully" } }));
                 break;
@@ -117,14 +121,15 @@ class GameLogic {
                 const password = data.password;
                 const phone = data.phone;
                 const ip = this.ws.getClientData(id).ip;
-
+                console.log("register: email: " + email + " password: " + password);
                 if (await emailExists(email)) {
+                    console.log("register: email already exists");
                     this.ws.sendTo(id, JSON.stringify({ type: "register", data: { success: false, message: "Email already exists" } }));
                     return;
                 }
 
                 await insertPlayer(nickname, email, password, phone, ip);
-
+                console.log("register: inserting player");
                 if (nickname && email && password) {
                     const mailOptions = {
                         from: 'noreply@bandera1.com',
@@ -146,6 +151,7 @@ class GameLogic {
                         }
                     });
                 }
+                console.log("register: account created successfully");
                 this.ws.sendTo(id, JSON.stringify({ type: "register", data: { success: true, message: "Account created successfully" } }));
                 break;
             default:
