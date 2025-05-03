@@ -84,6 +84,21 @@ class Room {
         };
     }
 
+    getPlayerSpawnPosition(player) {
+        switch (player.teamId) {
+            case 0:
+                return { x: this.MAP_SIZE.width, y: this.MAP_SIZE.heigth };
+            case 1:
+                return { x: -this.MAP_SIZE.width, y: -this.MAP_SIZE.heigth };
+            case 2:
+                return { x: this.MAP_SIZE.width, y: -this.MAP_SIZE.heigth };
+            case 3:
+                return { x: -this.MAP_SIZE.width, y: this.MAP_SIZE.heigth };
+            default:
+                return { x: 0, y: 0 };
+        }
+    }
+
     async onFinish(timeStr) {
         this.started = !this.started;
         if (this.started) {
@@ -95,27 +110,9 @@ class Room {
             }
             // Setear la posición inicial de los jugadores segun el equipo
             for (let i = 0; i < this.players.length; i++) {
-                switch (this.players[i].teamId) {
-                    case 0:
-                        this.players[i].x = this.MAP_SIZE.width
-                        this.players[i].y = this.MAP_SIZE.heigth
-                        break;
-                    case 1:
-                        this.players[i].x = -this.MAP_SIZE.width
-                        this.players[i].y = -this.MAP_SIZE.heigth
-                        break;
-                    case 2:
-                        this.players[i].x = this.MAP_SIZE.width
-                        this.players[i].y = -this.MAP_SIZE.heigth
-                        break;
-                    case 3:
-                        this.players[i].x = -this.MAP_SIZE.width
-                        this.players[i].y = this.MAP_SIZE.heigth
-                        break;
-                    default:
-                        this.players[i].x = 0;
-                        this.players[i].y = 0;
-                }
+               position = this.getPlayerSpawnPosition(this.players[i]);
+               this.players[i].x = position.x;
+               this.players[i].y = position.y;
             }
 
             this.keys = [

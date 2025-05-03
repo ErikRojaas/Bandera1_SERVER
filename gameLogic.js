@@ -169,6 +169,18 @@ class GameLogic {
             player.update(deltaTime);
             const room = player.room;
             const flag = room.flags[0];
+            // TEST life
+            player.life -= deltaTime;
+            if (player.life <= 0) {
+                position = room.getPlayerSpawnPosition(player);
+                player.x = position.x;
+                player.y = position.y;
+                player.life = 100;
+                ws.sendTo(player.id, JSON.stringify({
+                    type: "death",
+                    data: {}
+                }));
+            }
     
             // MOVIMIENTO Y COLISIONES CON KEYS
             for (let i = room.keys.length - 1; i >= 0; i--) {

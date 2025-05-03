@@ -15,6 +15,7 @@ class Player {
         this.nickname = null;
         this.teamId = teamId; // Nuevo
         this.teamName = this.getTeamNameById(teamId); // Nuevo
+        this.life = 100;
     }
 
     update(deltaTime) {
@@ -25,6 +26,9 @@ class Player {
             this.x += this.moveVector.dx * this.PLAYER_SPEED * deltaTime;
             this.y += this.moveVector.dy * this.PLAYER_SPEED * deltaTime;
         }
+
+
+       
     }
 
     setMoveVector(moveVector) {
@@ -47,6 +51,7 @@ class Player {
             id: this.id,
             x: this.x,
             y: this.y,
+            life: this.life,
             moveVector: this.moveVector,
             speedVector: this.hasFlag ? {speedX: this.moveVector.dx * this.PLAYER_FLAG_SPEED, speedY: this.moveVector.dy * this.PLAYER_FLAG_SPEED} :
                 {speedX: this.moveVector.dx * this.PLAYER_SPEED, speedY: this.moveVector.dy * this.PLAYER_SPEED},
