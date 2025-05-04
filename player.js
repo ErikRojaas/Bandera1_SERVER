@@ -82,6 +82,7 @@ class Player {
         this.hasKey = false;
         this.hasFlag = false;
         this.points = 0;
+        this.life = 100;
     }
 }
 
