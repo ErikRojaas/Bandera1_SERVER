@@ -110,7 +110,7 @@ class Room {
             }
             // Setear la posición inicial de los jugadores segun el equipo
             for (let i = 0; i < this.players.length; i++) {
-               position = this.getPlayerSpawnPosition(this.players[i]);
+               const position = this.getPlayerSpawnPosition(this.players[i]);
                this.players[i].x = position.x;
                this.players[i].y = position.y;
             }
