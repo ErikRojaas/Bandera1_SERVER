@@ -176,7 +176,7 @@ class GameLogic {
                 player.x = position.x;
                 player.y = position.y;
                 player.life = 100;
-                ws.sendTo(player.id, JSON.stringify({
+                this.ws.sendTo(player.id, JSON.stringify({
                     type: "death",
                     data: {}
                 }));
