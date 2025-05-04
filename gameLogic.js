@@ -170,9 +170,9 @@ class GameLogic {
             const room = player.room;
             const flag = room.flags[0];
             // TEST life
-            player.life -= deltaTime;
+            player.life -= deltaTime*5;
             if (player.life <= 0) {
-                position = room.getPlayerSpawnPosition(player);
+                const position = room.getPlayerSpawnPosition(player);
                 player.x = position.x;
                 player.y = position.y;
                 player.life = 100;
