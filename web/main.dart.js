@@ -6968,8 +6968,8 @@ a81(a){return A.amU(a)},
 amU(a){var s=0,r=A.L(t.H),q,p,o,n,m
 var $async$a81=A.M(function(b,c){if(b===1)return A.I(c,r)
 while(true)switch(s){case 0:try{$.acE=a
-q="ws"
-p=A.fB(A.k(q)+"://"+A.a8j().gnx()+":8081")
+q="wss"
+p=A.fB(A.k(q)+"://"+A.a8j().gnx())
 $.Ys=A.akv(J.bY(p))
 A.bt("Web: Connected to server at "+A.k(p))
 n=$.Ys.r.b
