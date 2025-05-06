@@ -58,7 +58,7 @@ app.get('/terms_of_services', async (req, res) => {
     res.sendFile(path.join(__dirname, 'public/terms_of_services.html'));
 });
 // Catch-all route for Flutter app (SPA) - Handle client-side routing
-app.get('*', (req, res) => {
+app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'web/index.html'));
 });
 // Inicialitzar servidor HTTP
