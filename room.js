@@ -122,10 +122,10 @@ class Room {
                 new Key(3, 1800, 1250)
             ];
 
-            this.timer.setDuration(20); // 60 segundos de partida
+            this.timer.setDuration(120); // 60 segundos de partida
         } else {
             // Termina partida
-            this.timer.setDuration(10); // 30 segundos de espera para próxima partida
+            this.timer.setDuration(15); // 30 segundos de espera para próxima partida
             let winner = "";
             let points = 0;
             let totalPoints = 0;
