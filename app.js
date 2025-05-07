@@ -11,7 +11,7 @@ const { connectToDB, getPlayerNickname, validatePlayer } = require('./mongoUtils
 connectToDB();
 
 const debug = false;
-const port = 8081;
+const port = 8080;
 const baseURL = `http://bandera1.ieti.site:${port}`; // Use http://
 
 // Inicialitzar WebSockets i la lògica del joc
