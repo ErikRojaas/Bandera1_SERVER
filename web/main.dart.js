@@ -6968,8 +6968,8 @@ a81(a){return A.amU(a)},
 amU(a){var s=0,r=A.L(t.H),q,p,o,n,m
 var $async$a81=A.M(function(b,c){if(b===1)return A.I(c,r)
 while(true)switch(s){case 0:try{$.acE=a
-q="wss"
-p=A.fB(A.k(q)+"://"+A.a8j().gnx())
+q="ws"
+p=A.fB(A.k(q)+"://"+A.a8j().gnx()+":8081")
 $.Ys=A.akv(J.bY(p))
 A.bt("Web: Connected to server at "+A.k(p))
 n=$.Ys.r.b
@@ -32644,7 +32644,7 @@ r=A.nn(new A.b9(s,r),new A.a2O(a),r.h("o.E"),t.k5)
 return A.jE(B.aT,A.Y(r,!0,A.l(r).h("o.E")),B.aX)},
 $S:352}
 A.a2O.prototype={
-$1(a){var s="images/Characters/Character",r=this.a,q=t.w,p=A.bW(r,null,q).w
+$1(a){var s="assets/images/Characters/Character",r=this.a,q=t.w,p=A.bW(r,null,q).w
 q=A.bW(r,null,q).w
 r=A.b([],t.cn)
 r.push(new A.lL(s+a.b+"/Char_Idle.png",80,80,6))
