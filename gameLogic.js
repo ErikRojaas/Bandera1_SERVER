@@ -154,6 +154,18 @@ class GameLogic {
                 console.log("register: account created successfully");
                 this.ws.sendTo(id, JSON.stringify({ type: "register", data: { success: true, message: "Account created successfully" } }));
                 break;
+            case "damage":
+                const targetId = data.targetId;
+                const targetPlayer = this.players.get(targetId);
+                if (!targetPlayer) {
+                    console.log(`Damage: jugador ${targetId} no encontrado`);
+                    return;
+                }
+            
+                // Reducir la vida
+                targetPlayer.life = Math.max(0, targetPlayer.life - 34);
+                console.log(`Jugador ${targetId} ha recibido 34 de daño. Vida restante: ${targetPlayer.life}`);
+                break;
             default:
                 break;
           }
