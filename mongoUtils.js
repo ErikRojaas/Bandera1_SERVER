@@ -170,8 +170,12 @@ async function correctCredentials(email, password) {
 
 async function validatePlayer(email) {
   const user = await jugadores.findOne({ email: email });
-  user.validated = true;
-  await user.save();
+  if (user) {
+    user.validated = true;
+    await user.save();
+  } else {
+    throw new Error(`Player with email ${email} not found.`);
+  }
 }
 
 async function getPlayerNickname(email) {
